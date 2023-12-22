@@ -32,7 +32,7 @@ The API is split into two parts: `geolocation` and `school_information`.
 #### Pseudo-code
   1. Calculate the distance for all geolocations
   2. Sort by distance
-  3. Correlate the nearest (e.g. 25) `geolocations` -> `school_id` with `school_information` -> `school_id`
+  3. Correlate the nearest (e.g. 25) `geolocation` -> `school_id` with `school_information` -> `school_id`
   4. return an array of `school_information`, ordered by distance, with an added `distance` parameter:
 
 ## Admin panel API user stories
@@ -45,19 +45,74 @@ The API is split into two parts: `geolocation` and `school_information`.
 
 | Method | Route        | Return type | Description |
 | :----- | :----------: | :---------: | :---------: |
-| GET    | /api/schools | Array[JSON] | Returns an array of `school_information` objects, filtered via options parameters
+| `GET`    | `/api/schools` | Array[JSON] | Returns an array of `school_information` objects, filtered via options parameters
 
-*Optional Parameters*
+<details>
+  <summary> Query parameters </summary>
+  
   | key             | value    | description |
   | :-------------- | :------: | :---------: |
-  | start	| 0-n	| return beginning at index n (Nth farthest away) instead of 0 |
-  | limit	| 1-50	| Number of schools to return between	1-50 |
-  | page	| 0-n	| The page number to use when Paginating through the images	0 |
-  | grade	| 7-14  | filter for schools that teach the provided grade |
+  | `start`	| 0-n	| return beginning at index n (Nth farthest away) instead of 0 |
+  | `limit`	| 1-50	| Number of schools to return between	1-50 |
+  | `page`	| 0-n	| The page number to use when Paginating through the images	0 |
+  | `grade`	| 7-14  | filter for schools that teach the provided grade |
+</details>
 
-| Method | Route         | Return type | Description |
-| :----- | :-----------: | :---------: | :---------: |
-| POST   | /admin/school | JSON | Create a new `school_information` entry, filtered via options parameters
+| Method  | Route             | Return type | Description |
+| :------ | :-----------:     | :---------: | :---------: |
+| `GET`     | `/admin/school`     | [JSON] | Read all `school_information` entries, or filter by optional parameters
+
+<details>
+  <summary> Query parameters </summary>
+  
+| key             | value    | description |
+| :-------------- | :------: | :---------: |
+| name	| String	| return beginning at index n (Nth farthest away) instead of 0 |
+| type	| String	| Number of schools to return between	1-50 |
+| grade	| Integer	| The page number to use when Paginating through the images	0 |
+
+</details>
+
+| Method  | Route             | Return type | Description |
+| :------ | :-----------:     | :---------: | :---------: |
+| `GET`     | `/admin/location`   | [JSON] | Read all `location` entries, or filter by optional parameters
+
+<details>
+  <summary> Query parameters </summary>
+  
+| key             | value    | description |
+| :-------------- | :------: | :---------: |
+| `school_id`
+| `x`	| 0-n	| return beginning at index n (Nth farthest away) instead of 0 |
+| `y`	| 1-50	| Number of schools to return between	1-50 |
+
+</details>
+
+
+| Method  | Route             | Return type | Description |
+| :------ | :-----------:     | :---------: | :---------: |
+| `PUT`     | `/admin/school`     | JSON   | Update a new `school_information` entry, returns the updated object
+| `PUT`     | `/admin/location`   | JSON   | Update a new `geolocation` entry, returns the updated object
+| `DELETE`  | `/admin/school`     | JSON   | Delete a new `school_information` entry, returns the deleted object
+| `DELETE`  | `/admin/location`   | JSON   | Delete a new `geolocation` entry, returns the deleted object
+
+<details>
+  <summary> Query parameters </summary>
+  
+| key             | value    | description |
+| :-------------- | :------: | :---------: |
+| `school_id` | String | (Applies to all PUT & DELETE) Chooses the school id of the entry to Update or delete |
+
+</details>
+
+
+| Method  | Route             | Return type | Description |
+| :------ | :-----------:     | :---------: | :---------: |
+| `POST`    | `/admin/school`     | JSON   | Create a new `school_information` entry, filtered via options parameters
+| `POST`    | `/admin/location`   | JSON   | Create a new `geolocation` entry, returns the object
+
+
+
 
 
 - **Your game’s title**: A description of your game. Background info about why you chose the game is a nice touch.
