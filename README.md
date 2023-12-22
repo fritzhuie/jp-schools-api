@@ -43,18 +43,6 @@ The API is split into two parts: `geolocation` and `school_information`.
 
 ## Routes
 
-GET /api/schools
-
-- Returns an array of school_information objects, filtered via options parameters.
-- Return type: Array[JSON]
-
-- Query Parameters:
-  - start (0-n): Return beginning at index n (Nth farthest away) instead of 0.
-  - limit (1-50): Number of schools to return between 1-50.
-  - page (0-n): The page number to use when paginating through the images.
-  - grade (7-14): Filter for schools that teach the provided grade.
-
-
 | Method | Route        | Return type | Description |
 | :----- | :----------: | :---------: | :---------: |
 | `GET`    | `/api/schools` | Array[JSON] | Returns an array of `school_information` objects, filtered via options parameters
@@ -72,7 +60,7 @@ GET /api/schools
 
 | Method  | Route             | Return type | Description |
 | :------ | :-----------:     | :---------: | :---------: |
-| `GET`     | `/admin/school`     | [JSON] | Read all `school_information` entries, or filter by optional parameters
+| `GET`     | `/admin/school`     | [JSON] | Read all `school_information` entries, filtered by (optional) query parameters
 
 <details>
   <summary> Query parameters </summary>
@@ -87,7 +75,7 @@ GET /api/schools
 
 | Method  | Route             | Return type | Description |
 | :------ | :-----------:     | :---------: | :---------: |
-| `GET`     | `/admin/location`   | [JSON] | Read all `location` entries, or filter by optional parameters
+| `GET`     | `/admin/location`   | [JSON] | Read all `location` entries, filtered by (optional) query parameters
 
 <details>
   <summary> Query parameters </summary>
@@ -103,8 +91,8 @@ GET /api/schools
 
 | Method  | Route             | Return type | Description |
 | :------ | :-----------:     | :---------: | :---------: |
-| `PUT`     | `/admin/school`     | JSON   | Update a new `school_information` entry, returns the updated object
-| `PUT`     | `/admin/location`   | JSON   | Update a new `geolocation` entry, returns the updated object
+| `PUT`     | `/admin/school`     | JSON   | Update a new `school_information` object, returns the updated object
+| `PUT`     | `/admin/location`   | JSON   | Update a new `geolocation` object, returns the updated object
 | `DELETE`  | `/admin/school`     | JSON   | Delete a new `school_information` entry, returns the deleted object
 | `DELETE`  | `/admin/location`   | JSON   | Delete a new `geolocation` entry, returns the deleted object
 
@@ -120,8 +108,8 @@ GET /api/schools
 
 | Method  | Route             | Return type | Description |
 | :------ | :-----------:     | :---------: | :---------: |
-| `POST`    | `/admin/school`     | JSON   | Create a new `school_information` entry, filtered via options parameters
-| `POST`    | `/admin/location`   | JSON   | Create a new `geolocation` entry, returns the object
+| `POST`    | `/admin/school`     | JSON   | Create a new `school_information` object, returns the new object
+| `POST`    | `/admin/location`   | JSON   | Create a new `geolocation` object, returns the new object
 
 
 
