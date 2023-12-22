@@ -1,7 +1,5 @@
 # School locator API
 
-## Description
-
 ### [Trello](https://trello.com/b/mM90QUXy/school-location-endpoint-service)
 
 A common query type for location-based services, is finding things that are nearby your physical location. This API can be used as a general purpose API for returning the nearest data entries that represent real work locations.
