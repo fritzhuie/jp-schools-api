@@ -1,5 +1,14 @@
 # Find My School API
 
+# Table of Contents
+1. [Find My School API](#find-my-school-api)
+2. [Technologies Used](#technologies-used)
+3. [Wireframe](#wireframe)
+4. [ERD (Entity Relationship Diagram)](#erd)
+5. [Location API User Stories (MVP)](#location-api-user-stories-mvp)
+6. [Admin Panel API User Stories](#admin-panel-api-user-stories)
+7. [Timeline](#timeline)
+
 ### [Trello](https://trello.com/b/mM90QUXy/school-location-endpoint-service)
 
 A common query type for location-based services, is finding things that are nearby your physical location. This API can be used as a general purpose API for returning the nearest data entries that represent real work locations.
@@ -20,7 +29,7 @@ Google maps API (for displaying results)
 <img width="821" alt="Screenshot 2023-12-21 at 11 52 13" src="https://github.com/fritzhuie/jp-schools-api/assets/1472318/5db00667-3bdf-460b-b6e3-1bc03a30c9c4">
 <img width="823" alt="Screenshot 2023-12-21 at 11 52 01" src="https://github.com/fritzhuie/jp-schools-api/assets/1472318/c2f5e1df-9bfc-4f9b-93bc-0dc72c344401">
 
-## Data Model / ERD
+## Entity Relationship Model / Diagram
 
 ![location server ERD](https://github.com/fritzhuie/jp-schools-api/assets/1472318/38cd62a1-c575-43b8-a1d1-e6636d4ba4a7)
 
