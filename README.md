@@ -1,4 +1,4 @@
-# School locator API
+# Find My School API
 
 ### [Trello](https://trello.com/b/mM90QUXy/school-location-endpoint-service)
 
