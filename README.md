@@ -1,6 +1,6 @@
 # Find My School API
 
-# Table of Contents
+## Table of Contents
 1. [Find My School API](#find-my-school-api)
 2. [Technologies Used](#technologies-used)
 3. [Wireframe](#wireframe)
