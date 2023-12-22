@@ -29,9 +29,9 @@ The API is split into two parts: `geolocation` and `school_information`, connect
 The Admin panel uses `Event`, `User`,
 
 ## Location API user stories (MVP)
-  1. As a user, I should be able to send my current location to see nearby schools, so that I can select my school easily from a list
-  2. As a user, I should be able to filter the API response by grade and number of schools in the response
-  3. As a user, I should be able to tap a "more" button to expand the list of schools, so that I can continue to search if the top response doesn't contain my school
+  - As a user, I should be able to send my current location to see nearby schools, so that I can select my school easily from a list
+  - As a user, I should be able to filter the API response by grade and number of schools in the response
+  - As a user, I should be able to tap a "more" button to expand the list of schools, so that I can continue to search if the top response doesn't contain my school
 
 #### Pseudo-code
   1. Calculate the distance for all geolocations
@@ -39,11 +39,14 @@ The Admin panel uses `Event`, `User`,
   3. Correlate the nearest (e.g. 25) `geolocation` -> `school_id` with `school_information` -> `school_id`
   4. return an array of `school_information`, ordered by distance, with an added `distance` parameter:
 
-## Admin panel API user stories (Stretch)
-  1. As a permissioned user, I should to be able to log in, so that I can access the database functions
-  2. As a permissioned user, I should to be able to create, read, update, and delete schools in both `geolocations` and `school_information`, so that I can manage the database in a non-technical way
-  3. As a permissioned user, I should to be able to verify that there is a 1-to-1 relationship between schools and locations, so that I can find issues easily
-  4. As a permissioned user, I should to be able to view the API's event logs, so that I can track usage and make decisions about rate limiting and pricing
+## Admin panel API user stories
+  MVP
+  - As a permissioned user, I should to be able to log in, so that I can access the database functions
+  - As a permissioned user, I should to be able to create, read, update, and delete schools in both `geolocations` and `school_information`, so that I can manage the database in a non-technical way
+  - As a permissioned user, I should to be able to verify that there is a 1-to-1 relationship between schools and locations, so that I can find issues easily
+     
+  Stretch
+  - As a permissioned user, I should to be able to view the API's event logs, so that I can track usage and make decisions about rate limiting and pricing
 
 ## Routes
 
