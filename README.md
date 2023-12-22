@@ -43,6 +43,18 @@ The API is split into two parts: `geolocation` and `school_information`.
 
 ## Routes
 
+GET /api/schools
+
+- Returns an array of school_information objects, filtered via options parameters.
+- Return type: Array[JSON]
+
+- Query Parameters:
+  - start (0-n): Return beginning at index n (Nth farthest away) instead of 0.
+  - limit (1-50): Number of schools to return between 1-50.
+  - page (0-n): The page number to use when paginating through the images.
+  - grade (7-14): Filter for schools that teach the provided grade.
+
+
 | Method | Route        | Return type | Description |
 | :----- | :----------: | :---------: | :---------: |
 | `GET`    | `/api/schools` | Array[JSON] | Returns an array of `school_information` objects, filtered via options parameters
