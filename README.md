@@ -45,6 +45,7 @@ The Admin panel uses `Event`, `User`,
   3. As a permissioned user, I should to be able to verify that there is a 1-to-1 relationship between schools and locations, so that I can find issues easily
   4. As a permissioned user, I should to be able to view the API's event logs, so that I can track usage and make decisions about rate limiting and pricing
 
+## Routes
 
 | Method | Route        | Return type | Description |
 | :----- | :----------: | :---------: | :---------: |
