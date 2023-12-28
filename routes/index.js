@@ -1,6 +1,6 @@
 import express from 'express' 
 const router = express.Router() 
-import { getSchools, createSchool } from '../controllers/schools.js' 
+import { getSchools, createSchool, updateSchool, deleteSchool } from '../controllers/schools.js' 
 
 router.get('/schools', async function(req, res) {
     try {
@@ -33,24 +33,25 @@ router.post('/schools', async function(req, res) {
     }
 })
 
-router.put('/:sid', async function(req, res) {
+router.put('/schools/:sid', async function(req, res) {
     try {
         const payload = req.body
         const id = req.params.sid
+        console.log(payload)
         const updatedSchool = await updateSchool(id, payload)
         res.status(200).json({
+            message: "it worked, maybe",
             updatedSchool
         })
     } catch (error) {
         const message = error.message
         res.status(500).json({
-            message: message,
-            message: `There was an error updating a school`
+            message: error,
         })
     }
 })
 
-router.delete('/:sid', async function(req, res) {
+router.delete('/schools/:sid', async function(req, res) {
     try {
         const id = req.params.sid
         const response = await deleteSchool(id)
