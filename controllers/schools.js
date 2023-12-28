@@ -1,4 +1,5 @@
 import { School, Geolocation, Locale } from '../data/schools.js'
+import { seedGeolocations } from '../seed/seed.js'
 
 const getSchools = async () => {
     return School.find({})
@@ -32,8 +33,20 @@ const deleteSchool = async (id) => {
     .catch((error) => { throw error })
 }
 
-const createGeolocation = async (payload) => {
+const seedGeolocationData = async (payload) => {
     return Geolocation.insertMany(payload)
+    .then((response) => { return response })
+    .catch((error) => { throw error })
+}
+
+const seedLocaleData = async (payload) => {
+    return Locale.insertMany(payload)
+    .then((response) => { return response })
+    .catch((error) => { throw error })
+}
+
+const seedSchoolData = async (payload) => {
+    return School.insertMany(payload)
     .then((response) => { return response })
     .catch((error) => { throw error })
 }
@@ -43,5 +56,8 @@ export {
     getSchools,
     createSchool,
     updateSchool,
-    deleteSchool
+    deleteSchool,
+    seedGeolocationData,
+    seedSchoolData,
+    seedLocaleData
 }

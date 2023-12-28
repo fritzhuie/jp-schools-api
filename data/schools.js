@@ -12,7 +12,7 @@ const schoolSchema = new mongoose.Schema(
 
 const locationSchema = new mongoose.Schema(
     {
-        postcode:   { type:Number, required:true },
+        postcode:   { type:Number, required:true, unique: true},
         latitude:   { type:Number, required:true },
         longitude:  { type:Number, required:true }
     }
@@ -20,7 +20,7 @@ const locationSchema = new mongoose.Schema(
 
 const postcodeInfoScema = new mongoose.Schema(
     {
-        postcode:   { type:Number, required:true },
+        postcode:   { type:Number, required:true, unique: true },
         prefecture: { type:String, required:true },
         city:       { type:String, required:true },
         ward:       { type:String, required:true }
