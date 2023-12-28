@@ -1,6 +1,6 @@
 import express from 'express' 
 const router = express.Router() 
-import { getSchools, createSchool, updateSchool, deleteSchool } from '../controllers/schools.js' 
+import { getSchools, createSchool, updateSchool, deleteSchool, seedEverything } from '../controllers/schools.js' 
 
 router.get('/schools', async function(req, res) {
     try {
@@ -55,6 +55,22 @@ router.delete('/schools/:sid', async function(req, res) {
     try {
         const id = req.params.sid
         const response = await deleteSchool(id)
+        res.status(200).json({
+            response
+        })
+    } catch(error) {
+        const message = error.message
+        res.status(418).json({
+            message: message,
+            message: `There was an error deleting a movie`
+        })
+    }
+})
+
+router.get('/schools/seed', async function(req, res) {
+    try {
+        const id = req.params.sid
+        const response = await seedEverything()
         res.status(200).json({
             response
         })
