@@ -1,14 +1,14 @@
 
-require('dotenv').config();
+import 'dotenv/config.js'
+import './config/database.js'
 
-const express = require('express');
-const mongoose = require('mongoose');
-
-const morgan = require("morgan")
-const cors = require('cors')
+import express from 'express'
+import mongoose from 'mongoose'
+import morgan from 'morgan'
+import cors from 'cors'
 
 //  Allows forms to work properly with delete and put requests
-const methodOverride = require('method-override')
+import methodOverride from 'method-override'
 
 const app = express();
 const {PORT = 2000, MONGODB_URI} = process.env;
@@ -24,7 +24,7 @@ mongoose.connect(MONGODB_URI, {
 mongoose.connection
 .on('open', () => console.log('connected to mongo'))
 .on('close', () => console.log('disconnected from mongo'))
-.on('error', () => console.log(error))
+.on('error', (error) => console.log(error))
 
 const cardSchema = new mongoose.Schema(
     {
@@ -47,14 +47,9 @@ const deckSchema = new mongoose.Schema (
 
 const Deck = mongoose.model("Deck", deckSchema);
 
-////////////////////////
-//  Middleware
-////////////////////////
-//  Prevent cors errors
+
 app.use(cors())
-//  Logging
 app.use(morgan('dev'))
-//  Parse JSON bodies
 app.use(express.json())
 //  Form requests put and delete
 app.use(methodOverride('_method'))
