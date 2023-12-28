@@ -9,7 +9,6 @@ mongoose.connect(MONGODB_URI, {
     useNewURLParser: true
 })
 
-
 mongoose.connection
 .on('open', () => console.log('connected to mongo'))
 .on('close', () => console.log('disconnected from mongo'))
