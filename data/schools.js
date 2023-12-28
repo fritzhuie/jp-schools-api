@@ -28,7 +28,7 @@ const postcodeInfoScema = new mongoose.Schema(
 )
 
 const School = mongoose.model('School', schoolSchema)
-const Geolocation = mongoose.model('Location', schoolSchema)
+const Geolocation = mongoose.model('Location', locationSchema)
 const Locale = mongoose.model('Locale', postcodeInfoScema)
 
 export {

@@ -32,6 +32,12 @@ const deleteSchool = async (id) => {
     .catch((error) => { throw error })
 }
 
+const createGeolocation = async (payload) => {
+    return Geolocation.insertMany(payload)
+    .then((response) => { return response })
+    .catch((error) => { throw error })
+}
+
 
 export {
     getSchools,

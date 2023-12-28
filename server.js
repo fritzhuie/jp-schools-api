@@ -17,13 +17,18 @@ const app = express();
 app.use(cors())
 app.use(morgan('dev'))
 app.use(express.json())
-//  Form requests put and delete
 app.use(methodOverride('_method'))
-//  Parse urlencoded request
 app.use(express.urlencoded({extended: true}))
+
 app.use('/api', router)
 
 
 app.listen(PORT, () => {
     console.log(`listening on ${PORT}`)
 })
+
+
+
+function seedThatMF() {
+
+}
