@@ -1,42 +1,31 @@
-////////////////////////
-//  Dependencies
-////////////////////////
-//  dotenv gets our env variables
+
 require('dotenv').config();
-//  Import express
+
 const express = require('express');
-//  Import mongoose
 const mongoose = require('mongoose');
-//  Logging
+
 const morgan = require("morgan")
-//  cors headers
 const cors = require('cors')
+
 //  Allows forms to work properly with delete and put requests
 const methodOverride = require('method-override')
-//  Creates the app object
+
 const app = express();
-//  Pull the PORT variable from the .env file
 const {PORT = 2000, MONGODB_URI} = process.env;
 
 console.log(MONGODB_URI)
-////////////////////////
-//  Database Connection
-////////////////////////
-//  Establish Connection
+
 mongoose.connect(MONGODB_URI, {
     useUnifiedTopology: true,
     useNewURLParser: true
 })
 
-//  Connection Events
+
 mongoose.connection
 .on('open', () => console.log('connected to mongo'))
 .on('close', () => console.log('disconnected from mongo'))
 .on('error', () => console.log(error))
 
-////////////////////////
-//  Database Models
-////////////////////////
 const cardSchema = new mongoose.Schema(
     {
       word: {
