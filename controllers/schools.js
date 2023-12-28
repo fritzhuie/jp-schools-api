@@ -8,7 +8,6 @@ const getSchools = async () => {
 }
 
 const createSchool = async (payload) => {
-
     return School.insertMany(payload)
     .then((response) => { return response })
     .catch((error) => { throw error })
@@ -33,20 +32,14 @@ const deleteSchool = async (id) => {
     .catch((error) => { throw error })
 }
 
-const seedGeolocationData = async (payload) => {
+const createGeolocation = async (payload) => {
     return Geolocation.insertMany(payload)
     .then((response) => { return response })
     .catch((error) => { throw error })
 }
 
-const seedLocaleData = async (payload) => {
+const createLocale = async (payload) => {
     return Locale.insertMany(payload)
-    .then((response) => { return response })
-    .catch((error) => { throw error })
-}
-
-const seedSchoolData = async (payload) => {
-    return School.insertMany(payload)
     .then((response) => { return response })
     .catch((error) => { throw error })
 }
@@ -57,7 +50,6 @@ export {
     createSchool,
     updateSchool,
     deleteSchool,
-    seedGeolocationData,
-    seedSchoolData,
-    seedLocaleData
+    createGeolocation,
+    createLocale
 }
