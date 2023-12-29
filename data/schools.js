@@ -2,8 +2,9 @@ import mongoose, { mongo } from "mongoose";
 
 const schoolSchema = new mongoose.Schema(
     {
+        // sid used to dedupe and pass as a reference
+        sid:        { type:String, required:true, unique: true },
         postcode:   { type:Number, required:true },
-        sid:        { type:String, required:true },
         name:       { type:String, required:true },
         address:    { type:String, required:true },
         class:      { type:String, required:true }

@@ -2,10 +2,17 @@ import express from 'express'
 const router = express.Router() 
 import { getSchools, createSchool, updateSchool, deleteSchool, seedEverything } from '../controllers/schools.js' 
 
+const API_KEY = process.env.API_KEY
 let username = null
 
 router.get('/schools', async function(req, res) {
     try {
+
+        const clientApiKey = req.headers['x-api-key'];
+        if (!clientApiKey || clientApiKey !== API_KEY) {
+            return res.status(401).json({ message: "Invalid API key" });
+        }
+
         const grade = req.query.grade
         const latitude = req.query.latitude
         const longitude = req.query.longitude

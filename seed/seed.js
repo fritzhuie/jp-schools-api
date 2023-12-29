@@ -14,18 +14,16 @@ async function seedGeolocations() {
     fs.createReadStream(filePath)
     .pipe(csv())
     .on('data', (data) => {
-    //   console.log(data);
       results.push(data)
     })
     .on('end', () => {
-    //   console.log(results)
       seedDatabase(results)
   })
   
   const seedDatabase = async (payload) => {
       try {
           const response = await createGeolocation(payload);
-          console.log('Database seeded successfully', response);
+          console.log('Geolocations seeded successfully', response);
       } catch (error) {
           console.error('Error seeding database:', error);
       }
@@ -53,7 +51,7 @@ async function seedSchools() {
   const seedDatabase = async (payload) => {
       try {
           const response = await createSchool(payload);
-          console.log('Database seeded successfully', response);
+          console.log('Schools seeded successfully', response);
       } catch (error) {
           console.error('Error seeding database:', error);
       }
@@ -81,7 +79,7 @@ async function seedLocales() {
   const seedDatabase = async (payload) => {
       try {
           const response = await createLocale(payload);
-          console.log('Database seeded successfully');
+          console.log('Locales seeded successfully');
       } catch (error) {
           console.error('Error seeding database:', error);
       }
