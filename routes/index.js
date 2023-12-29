@@ -2,17 +2,20 @@ import express from 'express'
 const router = express.Router() 
 import { getSchools, createSchool, updateSchool, deleteSchool, seedEverything } from '../controllers/schools.js' 
 
+let username = null
+
 router.get('/schools', async function(req, res) {
     try {
-        const response = await getSchools()
-        console.log(response)
+        const grade = req.query.grade
+        const latitude = req.query.latitude
+        const longitude = req.query.longitude
+        const response = await getSchools(grade, latitude, longitude)
         res.status(200).json({
             response
         })
     }catch(error) {
         res.status(500).json({
-            message: message,
-            message: `There was an error getting schools`
+            message: `There was an error getting schools: ${error}`
         })
     }
 })
