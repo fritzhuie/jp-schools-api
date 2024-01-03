@@ -1,4 +1,4 @@
-import mongoose, { Mongoose, mongo } from "mongoose";
+import mongoose, { Mongoose, mongo } from 'mongoose';
 
 const interaction = new mongoose.Schema(
     {
@@ -22,7 +22,7 @@ const compliment = new mongoose.Schema(
     }
 )
 
-const Compliment = mongoose.model("Compliment", compliment)
+const Compliment = mongoose.model('Compliment', compliment)
 
 const user = new mongoose.Schema(
     {
@@ -41,6 +41,6 @@ const user = new mongoose.Schema(
     { timestamps: true }
 )
 
-const User = mongoose.model("User", user)
+const User = mongoose.model('User', user)
 
 export { User, Interaction, Compliment }

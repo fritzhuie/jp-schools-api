@@ -1,9 +1,9 @@
-import express from "express"
-import jwt from "jsonwebtoken"
+import express from 'express'
+import jwt from 'jsonwebtoken'
 const social = express.Router()
 const JWT_SECRET = process.env.JWT_SECRET
 
-import { login, createAccount, readProfile, updateAvatar } from "../controllers/social.js"
+import { login, createAccount, readProfile, updateAvatar } from '../controllers/social.js'
 
 // PUT change profile photo
 
@@ -21,7 +21,7 @@ import { login, createAccount, readProfile, updateAvatar } from "../controllers/
 // POST answer poll
 // POST skip poll
 
-social.get("/", (req, res) => {
+social.get('/', (req, res) => {
     try {
         res.status(200).json({
             message: `ping`,
@@ -35,17 +35,17 @@ social.get("/", (req, res) => {
 
 // ******* user information is stored in bearer token, then retrieved from jwt.decode()
 
-social.post("/login", async (req, res) => {
+social.post('/login', async (req, res) => {
     try {
         const phoneNumber = req.body.phone
         if (!phoneNumber) {
-            return res.status(400).json({ message: "Phone number is required" })
+            return res.status(400).json({ message: 'Phone number is required' })
         }
 
         const profile = await login(phoneNumber)
         if (profile) {
             const token = jwt.sign({ phone: phoneNumber }, JWT_SECRET, {
-                expiresIn: "24h",
+                expiresIn: '24h',
             })
             res.status(200).json({
                 token: token
@@ -62,7 +62,7 @@ social.post("/login", async (req, res) => {
     }
 })
 
-social.post("/signup", async (req, res) => {
+social.post('/signup', async (req, res) => {
     try {
         const response = await createAccount(req.body)
         if (response) {
@@ -81,10 +81,10 @@ social.post("/signup", async (req, res) => {
     }
 })
 
-social.get("/profile", verifyToken, async (req, res) => {
+social.get('/profile', verifyToken, async (req, res) => {
     try {
         const phoneNumber = req.user.phone
-        console.log("pulling self account for: ", phoneNumber)
+        console.log('pulling self account for: ', phoneNumber)
         const response = await readProfile(phoneNumber)
         if (response) {
             res.status(200).json(response)
@@ -96,7 +96,22 @@ social.get("/profile", verifyToken, async (req, res) => {
     }
 })
 
-social.put("/avatar", verifyToken, async (req, res) => {
+social.get('/profile/:phone', verifyToken, async (req, res) => {
+    try {
+        const phoneNumber = req.params.phone
+        console.log('pulling other account for: ', phoneNumber)
+        const response = await readProfile(phoneNumber)
+        if (response) {
+            res.status(200).json(response)
+        }
+    } catch (error) {
+        res.status(403).json({
+            message: error,
+        })
+    }
+})
+
+social.put('/avatar', verifyToken, async (req, res) => {
     try {
         const phoneNumber = req.user.phone
         const url = req.body.url
@@ -114,22 +129,9 @@ social.put("/avatar", verifyToken, async (req, res) => {
     }
 })
 
-social.get("/profile/:phone", verifyToken, async (req, res) => {
-    try {
-        const phoneNumber = req.params.phone
-        console.log("pulling other account for: ", phoneNumber)
-        const response = await readProfile(phoneNumber)
-        if (response) {
-            res.status(200).json(response)
-        }
-    } catch (error) {
-        res.status(403).json({
-            message: error,
-        })
-    }
-})
+// social.post('/request', )
 
-social.get("/verifyToken", verifyToken, (req, res) => {
+social.get('/verifyToken', verifyToken, (req, res) => {
     try {
         res.status(200).json({
             message: `Token verified successfully. Phone number from token: ${req.user.phone}`,
@@ -142,10 +144,10 @@ social.get("/verifyToken", verifyToken, (req, res) => {
 })
 
 function verifyToken(req, res, next) {
-    const token = req.headers.authorization?.split(" ")[1]
+    const token = req.headers.authorization?.split(' ')[1]
 
     if (!token) {
-        return res.status(401).json({ message: "No token provided" })
+        return res.status(401).json({ message: 'No token provided' })
     }
 
     try {
@@ -153,7 +155,7 @@ function verifyToken(req, res, next) {
         req.user = decoded
         next()
     } catch (error) {
-        res.status(401).json({ message: "Invalid token" })
+        res.status(401).json({ message: 'Invalid token' })
     }
 }
 

@@ -1,19 +1,19 @@
-import express from "express"
+import express from 'express'
 const schools = express.Router()
 import {
     getSchools,
     createSchool,
     updateSchool,
     deleteSchool,
-} from "../controllers/schools.js"
+} from '../controllers/schools.js'
 
-schools.get("/schools", async function (req, res) {
+schools.get('/schools', async function (req, res) {
     try {
         const API_KEY = process.env.API_KEY
         const clientApiKey = req.headers['x-api-key']
 
         if (!clientApiKey || clientApiKey !== API_KEY) {
-            // res.status(401).json({ message: "Invalid API key" })
+            // res.status(401).json({ message: 'Invalid API key' })
         }
 
         const parameters = req.query
@@ -27,7 +27,7 @@ schools.get("/schools", async function (req, res) {
     }
 })
 
-schools.post("/schools", async function (req, res) {
+schools.post('/schools', async function (req, res) {
     try {
         const payload = req.body
         const response = await createSchool(payload)
@@ -43,14 +43,14 @@ schools.post("/schools", async function (req, res) {
     }
 })
 
-schools.put("/schools/:sid", async function (req, res) {
+schools.put('/schools/:sid', async function (req, res) {
     try {
         const payload = req.body
         const id = req.params.sid
         console.log(payload)
         const updatedSchool = await updateSchool(id, payload)
         res.status(200).json({
-            message: "it worked, maybe",
+            message: 'it worked, maybe',
             updatedSchool,
         })
     } catch (error) {
@@ -61,7 +61,7 @@ schools.put("/schools/:sid", async function (req, res) {
     }
 })
 
-schools.delete("/schools/:sid", async function (req, res) {
+schools.delete('/schools/:sid', async function (req, res) {
     try {
         const id = req.params.sid
         const response = await deleteSchool(id)

@@ -1,4 +1,4 @@
-import { School, Geolocation, Locale } from "../data/schools.js"
+import { School, Geolocation, Locale } from '../data/schools.js'
 
 const getSchools = async (query) => {
 
@@ -10,7 +10,7 @@ const getSchools = async (query) => {
     const lat = parseFloat(latitude)
     const lon = parseFloat(longitude)
     if (isNaN(lat) || isNaN(lon)) {
-        throw "Missing valid latitude and longitude"
+        throw 'Missing valid latitude and longitude'
     }
 
     const locations = await Geolocation.find({}).limit(20)
@@ -31,7 +31,7 @@ async function schoolsAtLocations(locations, latitude, longitude) {
 
     postcodesByDistance.sort((a, b) => a.distance - b.distance)
     postcodesByDistance = postcodesByDistance.slice(0, 100)
-    console.log(" top 10 Postcodes: ", postcodesByDistance.slice(0, 10))
+    console.log(' top 10 Postcodes: ', postcodesByDistance.slice(0, 10))
 
     const schoolPromises = postcodesByDistance.map((postcode) => {
         return School.find({ postcode: postcode.postcode })
@@ -108,12 +108,12 @@ function filterSchools(grade) {
         return []
     }
     if (grade === 7 || grade === 8 || grade === 9) {
-        return ["C1", "C2", "D2", "E1", "H2"]
+        return ['C1', 'C2', 'D2', 'E1', 'H2']
     }
     if (grade === 10 || grade === 11 || grade === 12) {
-        return ["C2", "D1", "D2", "E1", "H2"]
+        return ['C2', 'D1', 'D2', 'E1', 'H2']
     }
 
     // TODO: screw it, do this later, search all for now
-    return ["C1", "C2", "D1", "D2", "E1", "E1", "E1", "H1", "H2"]
+    return ['C1', 'C2', 'D1', 'D2', 'E1', 'E1', 'E1', 'H1', 'H2']
 }

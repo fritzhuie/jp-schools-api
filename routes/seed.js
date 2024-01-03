@@ -1,8 +1,8 @@
-import express from "express"
+import express from 'express'
 const seed = express.Router()
-import { seedCompliments, seedSchoolData } from "../seed/seed.js"
+import { seedCompliments, seedSchoolData } from '../seed/seed.js'
 
-seed.get("/seed", async (req, res) => {
+seed.get('/seed', async (req, res) => {
     try {
         const id = req.params.sid
         const response = await seedCompliments()
@@ -18,14 +18,14 @@ seed.get("/seed", async (req, res) => {
     }
 })
 
-seed.get("/schools/seed", async function (req, res) {
+seed.get('/schools/seed', async function (req, res) {
     try {
 
         const API_KEY = process.env.API_KEY
         const clientApiKey = req.headers['x-api-key']
 
         if (!clientApiKey || clientApiKey !== API_KEY) {
-            // res.status(401).json({ message: "Invalid API key" })
+            // res.status(401).json({ message: 'Invalid API key' })
         }
 
         const id = req.params.sid

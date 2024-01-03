@@ -1,5 +1,5 @@
 
-import { Compliment, Interaction, User } from "../data/social.js"
+import { Compliment, Interaction, User } from '../data/social.js'
 
 // POST phone number login
 const login = async (phoneNumber) => {
@@ -15,10 +15,10 @@ const login = async (phoneNumber) => {
 const createAccount = async (payload) => {
     try {
         const userExists = await User.exists({ phone: payload.phone })
-        if (userExists) { throw "user exists" }
+        if (userExists) { throw 'user exists' }
 
         const usernameExists = await User.exists({ username: payload.username })
-        if (usernameExists) { throw "username taken" }
+        if (usernameExists) { throw 'username taken' }
 
         const newUser = new User(
             {
@@ -39,7 +39,7 @@ const createAccount = async (payload) => {
 const readProfile = async (phoneNumber) => {
     const user = await User.findOne({ phone: phoneNumber })
     if (user) { return user }
-    throw "user not found"
+    throw 'user not found'
 }
 
 // PUT change profile photo
