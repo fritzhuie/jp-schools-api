@@ -15,6 +15,15 @@ const interaction = new mongoose.Schema(
 
 const Interaction = mongoose.model('Interaction', interaction)
 
+const compliment = new mongoose.Schema(
+    {
+        emoji:        { type: String, required: true },
+        message:      { type: String, required: true },
+    }
+)
+
+const Compliment = mongoose.model("Compliment", compliment)
+
 const user = new mongoose.Schema(
     {
         phonenumber:  { type: String, required: true, unique: true },
@@ -34,4 +43,4 @@ const user = new mongoose.Schema(
 
 const User = mongoose.model("User", user)
 
-export { User, Interaction }
+export { User, Interaction, Compliment }
