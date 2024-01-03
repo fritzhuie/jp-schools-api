@@ -1,9 +1,9 @@
 import express from "express"
-const social = express.Router()
-
 import jwt from "jsonwebtoken"
-// import dotenv from 'dotenv'
+const social = express.Router()
 const JWT_SECRET = process.env.JWT_SECRET
+
+import { login, createAccount } from "../controllers/social.js"
 
 // POST phone login
 // POST create account
@@ -23,13 +23,10 @@ const JWT_SECRET = process.env.JWT_SECRET
 // POST answer poll
 // POST skip poll
 
-
-
-
 social.get("/", (req, res) => {
     try {
         res.status(200).json({
-            message: `ping`
+            message: `ping`,
         })
     } catch (error) {
         res.status(500).json({
@@ -40,55 +37,65 @@ social.get("/", (req, res) => {
 
 // ******* user information is stored in bearer token, then retrieved from jwt.decode()
 
-social.post("/login", (req, res) => {
+social.post("/login", async (req, res) => {
     try {
-
         const phoneNumber = req.body
-
         if (!phoneNumber) {
             return res.status(400).json({ message: "Phone number is required" })
         }
 
-        const token = jwt.sign({ phone: phoneNumber }, JWT_SECRET, {
-            expiresIn: "24h",
-        })
-        res.json({ token })
+        const user = await login(phoneNumber)
+        if (user) {
+            const token = jwt.sign({ phone: phoneNumber }, JWT_SECRET, {
+                expiresIn: "24h",
+            })
+            res.status(200).json({
+                token: token,
+                profile: user
+            })
+        } else {
+            res.status(403).json({
+                message: `No user found for ${phoneNumber}`,
+            })
+        }
     } catch (error) {
         res.status(500).json({
-            message: `There was an error getting schools: ${error}`,
+            message: `There was an error logging in: ${error}`,
         })
     }
 })
 
-social.post('/signup', verifyToken, async (req, res) => {
+social.post("/signup", verifyToken, async (req, res) => {
     try {
         console.log("signing up phone number", req.user.phone)
-        const response = await createAccount()
+        const response = await createAccount(req.user.phone, req.body)
         res.status(200).json({
-            response
+            response,
         })
     } catch (error) {
         res.status(403).json({
-            message: `Error creating account: ${error}`
+            message: `Error creating account: ${error}`,
         })
     }
 })
 
-social.get('/verifyToken', verifyToken, (req, res) => {
+social.get("/verifyToken", verifyToken, (req, res) => {
     try {
-        res.status(200).json({ message: `Token verified successfully. Phone number from token: ${req.user.phone}` })
+        res.status(200).json({
+            message: `Token verified successfully. Phone number from token: ${req.user.phone}`,
+        })
     } catch (error) {
         res.status(500).json({
-            message: `There was an error: ${error}`
+            message: `There was an error: ${error}`,
         })
     }
 })
 
 function verifyToken(req, res, next) {
-    const token = req.headers.authorization?.split(' ')[1]
+    const token = req.headers.authorization?.split(" ")[1]
 
     if (!token) {
-        return res.status(401).json({ message: 'No token provided' })
+        return res.status(401).json({ message: "No token provided" })
     }
 
     try {
@@ -97,7 +104,7 @@ function verifyToken(req, res, next) {
         console.log(req.user)
         next()
     } catch (error) {
-        res.status(401).json({ message: 'Invalid token' })
+        res.status(401).json({ message: "Invalid token" })
     }
 }
 

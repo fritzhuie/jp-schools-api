@@ -2,23 +2,29 @@
 import { Compliment, Interaction, User } from "../data/social.js"
 
 // POST phone login
+const login = async (phoneNumber) => {
+    try {
+        const user = await User.exists({phone: phoneNumber})
+        return user
+    } catch (error) {
+        throw `error thrown for ${phoneNumber}: ${error}`
+    }
+}
 
 // POST create account
 const createAccount = async (phone, payload) => {
     try {
         if (!phone) { throw new Error("Missing phoneNumber") }
 
-        const existingUser = await User.findOne({ phonenumber: payload.phoneNumber })
+        const existingUser = await User.findOne({ phone: payload.phonenumber })
         if (existingUser) { return existingUser }
 
         const newUser = new User(
             {
-                phonenumber: phone,
+                phone: phone,
                 username: payload.username,
-                profileImg: "",
-                gender: payload.gender,
-                familyName: payload.familyName,
-                givenName: payload.givenName
+                familyname: payload.familyname,
+                givenname: payload.givenname
             }
         )
         await newUser.save()
@@ -35,8 +41,8 @@ const updateProfileImage = async (newImageUrl) => {
         phoneNumber = getUserInfoFromToken()
 
         const result = await User.findOneAndUpdate(
-            { phonenumber: phoneNumber }, // find the user by phone number
-            { profileImg: newImageUrl },  // update the profileImg field
+            { phone: phoneNumber },       // find the user by phone number
+            { profileimg: newImageUrl },  // update the profileImg field
             { new: true }                 // return the updated document
         )
 
@@ -69,5 +75,8 @@ const createCompliment = async (payload) => {
 }
 
 export {
-    createCompliment
+    login,
+    createCompliment,
+    createAccount,
+    updateProfileImage
 }

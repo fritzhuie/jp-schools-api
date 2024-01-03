@@ -7,7 +7,7 @@ const interaction = new mongoose.Schema(
         reciever:     { type: String, required: true },
         message:      { type: String, required: true },
         viewed:       { type: Boolean, default: false },
-        senderReveal: { type: Boolean, default: false } //won't use, ice box
+        reveal:       { type: Boolean, default: false } //won't use, ice box
     },
     { timestamps: true }
 )
@@ -26,12 +26,11 @@ const Compliment = mongoose.model("Compliment", compliment)
 
 const user = new mongoose.Schema(
     {
-        phonenumber:   { type: Number, required: true, unique: true },
+        phone:         { type: Number, required: true, unique: true },
         username:      { type: String, required: true, unique: true },
-        profileImg:    { type: String },
-        gender:        { type: String },
-        familyName:    { type: String },
-        givenName:     { type: String },
+        profileimg:    { type: String },
+        familyname:    { type: String },
+        givenname:     { type: String },
         friends:      [{ type: String }], //userIDs (friend ids)
         blocked:      [{ type: String }], //userIDs (blocked users)
         pending:      [{ type: String }], //userIDs (friend requests)
