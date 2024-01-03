@@ -4,9 +4,25 @@ import { Compliment, Interaction, User } from "../data/social.js"
 // POST phone login
 
 // POST create account
-const createAccount = async (payload) => {
+const createAccount = async (phone, payload) => {
     try {
-        return User.insertMany(payload)
+        if (!phone) { throw new Error("Missing phoneNumber") }
+
+        const existingUser = await User.findOne({ phonenumber: payload.phoneNumber })
+        if (existingUser) { return existingUser }
+
+        const newUser = new User(
+            {
+                phonenumber: phone,
+                username: payload.username,
+                profileImg: "",
+                gender: payload.gender,
+                familyName: payload.familyName,
+                givenName: payload.givenName
+            }
+        )
+        await newUser.save()
+        return newUser
     } catch (e) {
         throw e
     }
@@ -22,11 +38,11 @@ const updateProfileImage = async (newImageUrl) => {
             { phonenumber: phoneNumber }, // find the user by phone number
             { profileImg: newImageUrl },  // update the profileImg field
             { new: true }                 // return the updated document
-        );
+        )
 
-        return result;
+        return result
     } catch (e) {
-        throw e;
+        throw e
     }
 }
 

@@ -6,7 +6,6 @@ import cors from 'cors'
 import 'dotenv/config.js'
 import './config/database.js'
 
-import router from './routes/index.js'
 import schools from './routes/schools.js'
 import social from './routes/social.js'
 import seed from './routes/seed.js'
@@ -22,9 +21,8 @@ app.use(express.json())
 app.use(methodOverride('_method'))
 app.use(express.urlencoded({extended: true}))
 
-app.use('/', router)
-app.use('/api', schools)
-app.use('/api', social)
+app.use('/schools', schools)
+app.use('/social', social)
 app.use('/seed', seed)
 
 const {PORT = 2000} = process.env
