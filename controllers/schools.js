@@ -1,4 +1,5 @@
 import { School, Geolocation, Locale } from "../data/schools.js"
+import { Compliment } from "../data/social.js"
 import { seedGeolocations, seedLocales, seedSchools } from "../seed/seed.js"
 
 const getSchools = async (query) => {
@@ -83,6 +84,14 @@ const createLocale = async (payload) => {
     }
 }
 
+const createCompliment = async (payload) => {
+    try {
+        return Compliment.insertMany(payload)
+    } catch (e) {
+        throw e
+    }
+}
+
 const seedEverything = async () => {
     try {
         await seedSchools()
@@ -101,6 +110,7 @@ export {
     deleteSchool,
     createGeolocation,
     createLocale,
+    createCompliment,
     seedEverything,
 }
 

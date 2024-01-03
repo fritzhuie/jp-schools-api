@@ -2,7 +2,7 @@ import fs from 'fs'
 import csv from 'csv-parser'
 import path from 'path'
 import { fileURLToPath } from 'url';
-import { createGeolocation, createSchool, createLocale } from '../controllers/schools.js';
+import { createGeolocation, createSchool, createLocale, createCompliment } from '../controllers/schools.js';
 
 async function seedGeolocations() {
 
@@ -86,8 +86,35 @@ async function seedLocales() {
   }   
 }
 
+async function seedCompliments() {
+
+    const results = [];
+
+    const __dirname = path.dirname(fileURLToPath(import.meta.url));
+    const filePath = path.join(__dirname, 'compliments.csv');
+
+    fs.createReadStream(filePath)
+    .pipe(csv())
+    .on('data', (data) => {
+      results.push(data)
+    })
+    .on('end', () => {
+      seedDatabase(results)
+  })
+  
+  const seedDatabase = async (payload) => {
+      try {
+          const response = await createCompliment(payload);
+          console.log('Compliments seeded successfully', response);
+      } catch (error) {
+          console.error('Error seeding database:', error);
+      }
+  }   
+}
+
 export {
     seedGeolocations,
     seedLocales,
-    seedSchools
+    seedSchools,
+    seedCompliments
 }

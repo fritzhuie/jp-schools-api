@@ -1,6 +1,5 @@
 import express from "express"
 const router = express.Router()
-
 import jwt from "jsonwebtoken"
 
 const JWT_SECRET = "your_secret_key" // remove from codepabe, replace with a secure key
