@@ -12,16 +12,17 @@ const login = async (phoneNumber) => {
 }
 
 // POST create account
-const createAccount = async (phone, payload) => {
+const createAccount = async (payload) => {
     try {
-        if (!phone) { throw new Error("Missing phoneNumber") }
+        const userExists = await User.exists({ phone: payload.phone })
+        if (userExists) { throw "user exists" }
 
-        const existingUser = await User.findOne({ phone: payload.phonenumber })
-        if (existingUser) { return existingUser }
+        const usernameExists = await User.exists({ username: payload.username })
+        if (usernameExists) { throw "username taken" }
 
         const newUser = new User(
             {
-                phone: phone,
+                phone: payload.phone,
                 username: payload.username,
                 familyname: payload.familyname,
                 givenname: payload.givenname
@@ -30,7 +31,7 @@ const createAccount = async (phone, payload) => {
         await newUser.save()
         return newUser
     } catch (e) {
-        throw e
+        throw `createAccount: ${e}`
     }
 }
 

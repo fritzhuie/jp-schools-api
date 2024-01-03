@@ -39,23 +39,23 @@ social.get("/", (req, res) => {
 
 social.post("/login", async (req, res) => {
     try {
-        const phoneNumber = req.body
+        const phoneNumber = req.body.phone
         if (!phoneNumber) {
             return res.status(400).json({ message: "Phone number is required" })
         }
 
-        const user = await login(phoneNumber)
-        if (user) {
+        const profile = await login(phoneNumber)
+        if (profile) {
             const token = jwt.sign({ phone: phoneNumber }, JWT_SECRET, {
                 expiresIn: "24h",
             })
             res.status(200).json({
                 token: token,
-                profile: user
+                profile: profile
             })
         } else {
             res.status(403).json({
-                message: `No user found for ${phoneNumber}`,
+                message: `No profile found for ${phoneNumber}`,
             })
         }
     } catch (error) {
@@ -65,13 +65,22 @@ social.post("/login", async (req, res) => {
     }
 })
 
-social.post("/signup", verifyToken, async (req, res) => {
+social.post("/signup", async (req, res) => {
     try {
-        console.log("signing up phone number", req.user.phone)
-        const response = await createAccount(req.user.phone, req.body)
-        res.status(200).json({
-            response,
-        })
+        const profile = await createAccount(req.body)
+        if (profile) {
+            const token = jwt.sign({ phone: req.body.phone }, JWT_SECRET, {
+                expiresIn: "24h",
+            })
+            res.status(200).json({
+                token: token,
+                profile: profile
+            })
+        } else {
+            res.status(403).json({
+                message: `No profile found for ${phoneNumber}`,
+            })
+        }
     } catch (error) {
         res.status(403).json({
             message: `Error creating account: ${error}`,
