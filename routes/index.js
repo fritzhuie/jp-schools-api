@@ -1,109 +1,49 @@
-import express from 'express' 
-const router = express.Router() 
-import jwt from 'jsonwebtoken'
-import { getSchools, createSchool, updateSchool, deleteSchool, seedEverything } from '../controllers/schools.js' 
+import express from "express"
+const router = express.Router()
 
-const JWT_SECRET = 'your_secret_key'; // remove from codepabe, replace with a secure key
+import jwt from "jsonwebtoken"
 
-router.post('/signin', (req, res) => {
-    const phoneNumber = req.body.phoneNumber;
-    
-    if (!phoneNumber) {
-        return res.status(400).json({ message: 'Phone number is required' });
-    }
+const JWT_SECRET = "your_secret_key" // remove from codepabe, replace with a secure key
 
-    // Create a token
-    const token = jwt.sign({ phone: phoneNumber }, JWT_SECRET, { expiresIn: '24h' });
-    
-    res.json({ token });
-});
-
-router.get('/schools', async function(req, res) {
+router.post("/signin", (req, res) => {
     try {
+        const phoneNumber = req.body.phoneNumber
 
-        const API_KEY = process.env.API_KEY
-        // const clientApiKey = req.headers['x-api-key'];
-        // if (!clientApiKey || clientApiKey !== API_KEY) {
-        //     return res.status(401).json({ message: "Invalid API key" });
-        // }
+        if (!phoneNumber) {
+            return res
+                .status(400)
+                .json({ message: "Phone number is required" })
+        }
 
-        const grade = req.query.grade
-        const latitude = req.query.latitude
-        const longitude = req.query.longitude
-        const response = await getSchools(grade, latitude, longitude)
-        console.log(`response: ${response}`)
-        res.status(200).json(response)
-    }catch(error) {
-        res.status(500).json({
-            message: `There was an error getting schools: ${error}`
+        // Create a token
+        const token = jwt.sign({ phone: phoneNumber }, JWT_SECRET, {
+            expiresIn: "24h",
         })
-    }
-})
 
-router.post('/schools', async function(req, res) {
-    try {
-        const payload = req.body
-        const response = await createSchool(payload)
-        res.status(200).json({
-            response
-        })
-    } catch(error) {
-        const message = error.message
-        res.status(500).json({
-            message: message,
-            message: `There was an error creating a school`
-        })
-    }
-})
-
-router.put('/schools/:sid', async function(req, res) {
-    try {
-        const payload = req.body
-        const id = req.params.sid
-        console.log(payload)
-        const updatedSchool = await updateSchool(id, payload)
-        res.status(200).json({
-            message: "it worked, maybe",
-            updatedSchool
-        })
+        res.json({ token })
     } catch (error) {
-        const message = error.message
         res.status(500).json({
-            message: error,
+            message: `There was an error getting schools: ${error}`,
         })
     }
 })
 
-router.delete('/schools/:sid', async function(req, res) {
-    try {
-        const id = req.params.sid
-        const response = await deleteSchool(id)
-        res.status(200).json({
-            response
-        })
-    } catch(error) {
-        const message = error.message
-        res.status(418).json({
-            message: message,
-            message: `There was an error deleting a movie`
-        })
-    }
-})
+function verifyToken(req, res, next) {
+    // Get the token from the request header
+    const token = req.headers.authorization?.split(' ')[1]
 
-router.get('/schools/seed', async function(req, res) {
-    try {
-        const id = req.params.sid
-        const response = await seedEverything()
-        res.status(200).json({
-            response
-        })
-    } catch(error) {
-        const message = error.message
-        res.status(418).json({
-            message: message,
-            message: `There was an error deleting a movie`
-        })
+    if (!token) {
+        return res.status(403).json({ message: 'A token is required for authentication' })
     }
-})
+
+    try {
+        // Verify the token
+        const decoded = jwt.verify(token, JWT_SECRET)
+        req.user = decoded
+    } catch (err) {
+        return res.status(401).json({ message: 'Invalid Token' })
+    }
+    return next()
+}
 
 export default router

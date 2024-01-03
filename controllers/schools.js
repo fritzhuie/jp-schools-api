@@ -1,7 +1,13 @@
 import { School, Geolocation, Locale } from "../data/schools.js"
 import { seedGeolocations, seedLocales, seedSchools } from "../seed/seed.js"
 
-const getSchools = async (grade, latitude, longitude, limit) => {
+const getSchools = async (query) => {
+
+    const grade = query.grade
+    const latitude = query.latitude
+    const longitude = query.longitude
+    const limit = query.limit
+
     const lat = parseFloat(latitude)
     const lon = parseFloat(longitude)
     if (isNaN(lat) || isNaN(lon)) {

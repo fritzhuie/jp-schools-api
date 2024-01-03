@@ -1,20 +1,37 @@
-import mongoose, { mongo } from "mongoose";
+import mongoose, { Mongoose, mongo } from "mongoose";
+
+const interaction = new mongoose.Schema(
+    {
+        uid:          { type: String, required: true },
+        sender:       { type: String, required: true },
+        reciever:     { type: String, required: true },
+        emoji:        { type: String, required: true },
+        message:      { type: String, required: true },
+        viewed:       { type: Boolean, required: true, default: false },
+        senderReveal: { type: Boolean, required: true, default: false }
+    },
+    { timestamps: true }
+)
+
+const Interaction = mongoose.model('Interaction', interaction)
 
 const user = new mongoose.Schema(
     {
-        phonenumber:    { type:String, required:true, unique:true },
-        schoolid:       { type:String, required:false },
-        grade:          { type:Number, required:false },
-        profileImg:     { type:String, required:false },
-        gender:         { type:String, required:false },
-        username:       { type:String, required:true },
-        familyName:     { type:String, required:true },
-        givenName:      { type:String, required:false }
-    }
+        phonenumber:  { type: String, required: true, unique: true },
+        username:     { type: String, required: true },
+        profileImg:   { type: String },
+        gender:       { type: String },
+        familyName:   { type: String },
+        givenName:    { type: String },
+        friends:      [{ type: String }], //userIDs
+        blocked:      [{ type: String }], //userIDs
+        pending:      [{ type: String }], //userIDs, friend requests
+        inbox:        [{ type: mongoose.Schema.Types.ObjectId, ref: 'Interaction' }],
+        activity:     [{ type: mongoose.Schema.Types.ObjectId, ref: 'Interaction' }]
+    },
+    { timestamps: true }
 )
 
-const User = mongoose.model('User', user)
+const User = mongoose.model("User", user)
 
-export {
-    User
-}
+export { User, Interaction }
