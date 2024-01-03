@@ -29,10 +29,16 @@ const createAccount = async (payload) => {
             }
         )
         await newUser.save()
-        return newUser
+        return `account created for phone number: ${payload.phone}`
     } catch (e) {
         throw `createAccount: ${e}`
     }
+}
+
+const readProfile = async (phoneNumber) => {
+    const user = await User.findOne({ phone: phoneNumber })
+    if (user) { return user }
+    throw "user not found"
 }
 
 // PUT change profile photo
@@ -79,5 +85,6 @@ export {
     login,
     createCompliment,
     createAccount,
+    readProfile,
     updateProfileImage
 }

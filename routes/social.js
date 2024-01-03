@@ -3,7 +3,7 @@ import jwt from "jsonwebtoken"
 const social = express.Router()
 const JWT_SECRET = process.env.JWT_SECRET
 
-import { login, createAccount } from "../controllers/social.js"
+import { login, createAccount, readProfile } from "../controllers/social.js"
 
 // POST phone login
 // POST create account
@@ -50,8 +50,7 @@ social.post("/login", async (req, res) => {
                 expiresIn: "24h",
             })
             res.status(200).json({
-                token: token,
-                profile: profile
+                token: token
             })
         } else {
             res.status(403).json({
@@ -67,14 +66,10 @@ social.post("/login", async (req, res) => {
 
 social.post("/signup", async (req, res) => {
     try {
-        const profile = await createAccount(req.body)
-        if (profile) {
-            const token = jwt.sign({ phone: req.body.phone }, JWT_SECRET, {
-                expiresIn: "24h",
-            })
+        const response = await createAccount(req.body)
+        if (response) {
             res.status(200).json({
-                token: token,
-                profile: profile
+                message: `Account created, please log in`
             })
         } else {
             res.status(403).json({
@@ -84,6 +79,21 @@ social.post("/signup", async (req, res) => {
     } catch (error) {
         res.status(403).json({
             message: `Error creating account: ${error}`,
+        })
+    }
+})
+
+social.get("/profile", verifyToken, async (req, res) => {
+    try {
+        const phoneNumber = req.user.phone
+        console.log("pulling account for: ", phoneNumber)
+        const response = await readProfile(phoneNumber)
+        if (response) {
+            res.status(200).json(response)
+        }
+    } catch (error) {
+        res.status(403).json({
+            message: error,
         })
     }
 })
