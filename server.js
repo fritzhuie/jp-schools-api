@@ -9,6 +9,8 @@ import './config/database.js'
 import router from './routes/index.js'
 import schools from './routes/schools.js'
 import social from './routes/social.js'
+import seed from './routes/seed.js'
+
 //  Allows forms to work properly with delete and put requests
 import methodOverride from 'method-override'
 
@@ -20,9 +22,10 @@ app.use(express.json())
 app.use(methodOverride('_method'))
 app.use(express.urlencoded({extended: true}))
 
-app.use('/api', router)
+app.use('/', router)
 app.use('/api', schools)
 app.use('/api', social)
+app.use('/seed', seed)
 
 const {PORT = 2000} = process.env
 app.listen(PORT, () => {

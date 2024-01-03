@@ -1,19 +1,23 @@
 import express from "express"
 const social = express.Router()
-import { seedCompliments } from "../seed/seed.js"
 
-router.get("/seed", async (req, res) => {
-    try {
-        const id = req.params.sid
-        const response = await seedCompliments()
-        res.status(200).json({
-            response,
-        })
-    } catch (error) {
-        const message = error.message
-        res.status(418).json({
-            message: message,
-            message: `There was an error deleting a movie`,
-        })
-    }
-})
+
+// POST phone login
+// POST create account
+// PUT change profile photo
+
+// GET friend recommendations
+// GET activity feed
+// GET inbox
+
+// POST send friend request
+// POST accept friend request
+// POST reject friend request
+
+// POST block user
+// DELETE unblock all users
+
+// POST answer poll
+// POST skip poll
+
+export default social

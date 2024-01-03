@@ -1,6 +1,4 @@
 import { School, Geolocation, Locale } from "../data/schools.js"
-import { Compliment } from "../data/social.js"
-import { seedGeolocations, seedLocales, seedSchools } from "../seed/seed.js"
 
 const getSchools = async (query) => {
 
@@ -84,25 +82,6 @@ const createLocale = async (payload) => {
     }
 }
 
-const createCompliment = async (payload) => {
-    try {
-        return Compliment.insertMany(payload)
-    } catch (e) {
-        throw e
-    }
-}
-
-const seedEverything = async () => {
-    try {
-        await seedSchools()
-        await seedLocales()
-        await seedGeolocations()
-        console.log("Seeding complete 🔥")
-    } catch (e) {
-        console.log("e during seeding:", e)
-    }
-}
-
 export {
     getSchools,
     createSchool,
@@ -110,8 +89,6 @@ export {
     deleteSchool,
     createGeolocation,
     createLocale,
-    createCompliment,
-    seedEverything,
 }
 
 function filterSchools(grade) {

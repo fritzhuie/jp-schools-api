@@ -2,7 +2,19 @@ import express from "express"
 const router = express.Router()
 import jwt from "jsonwebtoken"
 
-const JWT_SECRET = "your_secret_key" // remove from codepabe, replace with a secure key
+const JWT_SECRET = process.env.JWT_SECRET
+
+router.post("/", (req, res) => {
+    try {
+        res.redirect('/signin')
+    } catch (error) {
+        res.status(500).json({
+            message: `There was an error redirecting: ${error}`,
+        })
+    }
+})
+
+// ******* user information is stored in bearer token, retrieve it during jwt.decode()
 
 router.post("/signin", (req, res) => {
     try {
@@ -28,7 +40,6 @@ router.post("/signin", (req, res) => {
 })
 
 function verifyToken(req, res, next) {
-    // Get the token from the request header
     const token = req.headers.authorization?.split(' ')[1]
 
     if (!token) {

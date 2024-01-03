@@ -2,7 +2,8 @@ import fs from 'fs'
 import csv from 'csv-parser'
 import path from 'path'
 import { fileURLToPath } from 'url';
-import { createGeolocation, createSchool, createLocale, createCompliment } from '../controllers/schools.js';
+import { createGeolocation, createSchool, createLocale } from '../controllers/schools.js';
+import { createCompliment } from '../controllers/social.js';
 
 async function seedGeolocations() {
 
@@ -112,9 +113,21 @@ async function seedCompliments() {
   }   
 }
 
+const seedSchoolData = async () => {
+    try {
+        await seedSchools()
+        await seedLocales()
+        await seedGeolocations()
+        console.log("Seeding complete 🔥")
+    } catch (e) {
+        console.log("e during seeding:", e)
+    }
+}
+
 export {
     seedGeolocations,
     seedLocales,
     seedSchools,
-    seedCompliments
+    seedCompliments,
+    seedSchoolData
 }

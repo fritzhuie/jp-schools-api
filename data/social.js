@@ -6,8 +6,8 @@ const interaction = new mongoose.Schema(
         sender:       { type: String, required: true },
         reciever:     { type: String, required: true },
         message:      { type: String, required: true },
-        viewed:       { type: Boolean, required: true, default: false },
-        senderReveal: { type: Boolean, required: true, default: false }
+        viewed:       { type: Boolean, default: false },
+        senderReveal: { type: Boolean, default: false } //won't use, ice box
     },
     { timestamps: true }
 )
@@ -26,18 +26,18 @@ const Compliment = mongoose.model("Compliment", compliment)
 
 const user = new mongoose.Schema(
     {
-        phonenumber:  { type: String, required: true, unique: true },
-        username:     { type: String, required: true, unique: true },
-        profileImg:   { type: String },
-        gender:       { type: String },
-        familyName:   { type: String },
-        givenName:    { type: String },
+        phonenumber:   { type: Number, required: true, unique: true },
+        username:      { type: String, required: true, unique: true },
+        profileImg:    { type: String },
+        gender:        { type: String },
+        familyName:    { type: String },
+        givenName:     { type: String },
         friends:      [{ type: String }], //userIDs (friend ids)
         blocked:      [{ type: String }], //userIDs (blocked users)
         pending:      [{ type: String }], //userIDs (friend requests)
-        inbox:        [{ type: mongoose.Schema.Types.ObjectId, ref: 'Interaction' }],
-        activity:     [{ type: mongoose.Schema.Types.ObjectId, ref: 'Interaction' }],
-        queue:        [{ type: mongoose.Schema.Types.ObjectId, ref: 'Compliment'}]
+        inbox:        [{ type: mongoose.Schema.Types.ObjectId, ref: 'Interaction' }], //your activity
+        activity:     [{ type: mongoose.Schema.Types.ObjectId, ref: 'Interaction' }], //friends activity
+        queue:        [{ type: mongoose.Schema.Types.ObjectId, ref: 'Compliment'  }]  //queue of daily polls
     },
     { timestamps: true }
 )
