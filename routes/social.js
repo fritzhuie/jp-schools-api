@@ -3,10 +3,8 @@ import jwt from "jsonwebtoken"
 const social = express.Router()
 const JWT_SECRET = process.env.JWT_SECRET
 
-import { login, createAccount, readProfile } from "../controllers/social.js"
+import { login, createAccount, readProfile, updateAvatar } from "../controllers/social.js"
 
-// POST phone login
-// POST create account
 // PUT change profile photo
 
 // GET friend recommendations
@@ -86,7 +84,40 @@ social.post("/signup", async (req, res) => {
 social.get("/profile", verifyToken, async (req, res) => {
     try {
         const phoneNumber = req.user.phone
-        console.log("pulling account for: ", phoneNumber)
+        console.log("pulling self account for: ", phoneNumber)
+        const response = await readProfile(phoneNumber)
+        if (response) {
+            res.status(200).json(response)
+        }
+    } catch (error) {
+        res.status(403).json({
+            message: error,
+        })
+    }
+})
+
+social.put("/avatar", verifyToken, async (req, res) => {
+    try {
+        const phoneNumber = req.user.phone
+        const url = req.body.url
+        console.log(typeof url)
+        console.log(url)
+        console.log(`changing avatar for ${phoneNumber} to ${url}`)
+        const response = await updateAvatar(phoneNumber, url)
+        if (response) {
+            res.status(200).json(response)
+        }
+    } catch (error) {
+        res.status(403).json({
+            message: error,
+        })
+    }
+})
+
+social.get("/profile/:phone", verifyToken, async (req, res) => {
+    try {
+        const phoneNumber = req.params.phone
+        console.log("pulling other account for: ", phoneNumber)
         const response = await readProfile(phoneNumber)
         if (response) {
             res.status(200).json(response)
@@ -120,7 +151,6 @@ function verifyToken(req, res, next) {
     try {
         const decoded = jwt.verify(token, JWT_SECRET)
         req.user = decoded
-        console.log(req.user)
         next()
     } catch (error) {
         res.status(401).json({ message: "Invalid token" })

@@ -28,9 +28,9 @@ const user = new mongoose.Schema(
     {
         phone:         { type: Number, required: true, unique: true },
         username:      { type: String, required: true, unique: true },
-        profileimg:    { type: String },
-        familyname:    { type: String },
-        givenname:     { type: String },
+        avatar:        { type: String, default: null },
+        familyname:    { type: String, default: null },
+        givenname:     { type: String, default: null  },
         friends:      [{ type: String }], //userIDs (friend ids)
         blocked:      [{ type: String }], //userIDs (blocked users)
         pending:      [{ type: String }], //userIDs (friend requests)

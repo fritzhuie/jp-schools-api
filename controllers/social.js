@@ -1,7 +1,7 @@
 
 import { Compliment, Interaction, User } from "../data/social.js"
 
-// POST phone login
+// POST phone number login
 const login = async (phoneNumber) => {
     try {
         const user = await User.exists({phone: phoneNumber})
@@ -35,6 +35,7 @@ const createAccount = async (payload) => {
     }
 }
 
+// view self profile
 const readProfile = async (phoneNumber) => {
     const user = await User.findOne({ phone: phoneNumber })
     if (user) { return user }
@@ -42,17 +43,13 @@ const readProfile = async (phoneNumber) => {
 }
 
 // PUT change profile photo
-const updateProfileImage = async (newImageUrl) => {
+const updateAvatar = async (phone, newImageUrl) => {
     try {
-
-        phoneNumber = getUserInfoFromToken()
-
         const result = await User.findOneAndUpdate(
-            { phone: phoneNumber },       // find the user by phone number
-            { profileimg: newImageUrl },  // update the profileImg field
-            { new: true }                 // return the updated document
+            { phone: phone },     // find the user by phone number
+            { avatar: newImageUrl },    // update the profileImg field
+            { new: true }               // return the updated document
         )
-
         return result
     } catch (e) {
         throw e
@@ -86,5 +83,5 @@ export {
     createCompliment,
     createAccount,
     readProfile,
-    updateProfileImage
+    updateAvatar
 }
