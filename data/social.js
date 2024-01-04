@@ -30,7 +30,7 @@ const user = new mongoose.Schema(
         username:      { type: String, required: true, unique: true },
         avatar:        { type: String, default: null },
         familyname:    { type: String, default: null },
-        givenname:     { type: String, default: null  },
+        givenname:     { type: String, default: null },
         friends:      [{ type: Number }], //userIDs (friend ids)
         blocked:      [{ type: Number }], //userIDs (blocked users)
         pending:      [{ type: Number }], //userIDs (friend requests)

@@ -1,5 +1,6 @@
 
 import { Compliment, Interaction, User } from '../data/social.js'
+import _ from 'lodash'
 
 // AUTH  ******************************************************************************************************
 
@@ -162,25 +163,59 @@ const updateAvatar = async (phone, newImageUrl) => {
 
 // INTERACTIONS *************************************************************************************************
 
-const handlePollInteraction = async (user, payload) => {
-    // remove poll from current user
+const handlePollInteraction = async (userphone, poll, chosen) => {
+
+    // check if poll exists in current User profile
+    // remove poll from current user's User.queue
     // send interaction to chosen user
-    //return 200
+    // return 200
 }
 
 const refreshPolls = async () => {
-    // add 10 random polls to user
-    //return 200
+    try {
+      const compliments = await Compliment.find()
+  
+      const users = await User.find()
+  
+      for (const user of users) {
+        const randomCompliments = _.sampleSize(compliments, 3)
+  
+        await User.updateOne({ _id: user._id }, { $set: { queue: [] } })
+        
+        await User.updateOne(
+          { _id: user._id },
+          { $push: { queue: { $each: randomCompliments.map(c => c._id) } } }
+        )
+      }
+  
+      return 200
+    } catch (e) {
+      console.error('Error refreshing polls:', e)
+      throw e
+    }
 }
 
-const getInbox = async (user) => {
-    // return User.inbox
-    //return 200
+const getInbox = async (userphone) => {
+    try {
+        const user = await User.findOne({ phone: userphone })
+        if (!user) { throw new Error('User not found') }
+
+        return user.inbox
+    } catch (e) {
+        console.error('Error getting inbox:', e)
+        throw e
+    }
 }
 
-const activity = async (user) => {
+const activity = async (userphone) => {
     // pull friends list from user
-    // for each friend, pull inbox, flat()
+    const user = await User.findOne({phone: userphone})
+    const updates = await Promise.all(
+        user.friends.map(phone => User.findOne({ phone: phone }, 'inbox -_id'))
+    )
+    const updatesSorted = updates.sort((a,b) => {
+        //sort by Interaction.createdAt
+    })
     // sort by created date
     // return array of interactions
 }
@@ -203,7 +238,8 @@ export {
     denyFriendRequest,
     acceptFriendRequest,
     removeFriend,
-    getFriendRecommendations
+    getFriendRecommendations,
+    refreshPolls
 }
 
 // GET activity feed

@@ -12,7 +12,8 @@ import {
     sendFriendRequest,
     acceptFriendRequest,
     removeFriend,
-    getFriendRecommendations
+    getFriendRecommendations,
+    refreshPolls
 } from "../controllers/social.js"
 
 // GET activity feed
@@ -223,7 +224,7 @@ social.put("/friend/deny", verifyToken, async (req, res) => {
     }
 })
 
-social.put("/friend/invite", verifyToken, (req, res) => {
+social.put("/friend/invite", verifyToken, async (req, res) => {
     try {
         const userPhone = req.user.phone
         const target = req.body.phone
@@ -232,7 +233,7 @@ social.put("/friend/invite", verifyToken, (req, res) => {
             throw new Error("cannot add yourself as a friend")
         }
         console.log(`sending friend invite to ${target} from ${userPhone}`)
-        const response = sendFriendRequest(userPhone, target)
+        const response = await sendFriendRequest(userPhone, target)
 
         res.status(200).json(response)
     } catch (error) {
@@ -241,6 +242,24 @@ social.put("/friend/invite", verifyToken, (req, res) => {
         })
     }
 })
+
+// POLLS *********************************************************************************************************
+
+social.get("/polls/refresh", async (req, res) => {
+    try {
+        const response = await refreshPolls()
+        res.status(200).json({
+            message: `done seeded polls`,
+        })
+    } catch (error) {
+        res.status(500).json({
+            message: `There was an error: ${error}`,
+        })
+    }
+})
+
+//refreshPolls
+
 
 // AUTH **********************************************************************************************************
 
