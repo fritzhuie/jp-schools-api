@@ -181,10 +181,10 @@ social.put("/friend/remove", verifyToken, async (req, res) => {
         console.log(`removing friend ${target} from ${userPhone}`)
         response = await removeFriend(userPhone, target)
 
-        res.status(200).json(response)
+        res.status(200).json(`removed friend ${target}`)
     } catch (error) {
         res.status(403).json({
-            message: error
+            message: `error removing friend ${target}: ${error}`
         })
     }
 })
@@ -200,10 +200,10 @@ social.put("/friend/accept", verifyToken, async (req, res) => {
         console.log(`accepting friend request from ${target}`)
         response = await acceptFriendRequest(userPhone, target)
 
-        res.status(200).json(response)
+        res.status(200).json(`accepted friend request from ${target}`)
     } catch (error) {
         res.status(403).json({
-            message: error
+            message: `error accepting friend request from ${target}: ${error}`
         })
     }
 })
@@ -219,10 +219,10 @@ social.put("/friend/deny", verifyToken, async (req, res) => {
         console.log(`denying friend request from ${target}`)
         response = await denyFriendRequest(userPhone, target)
 
-        res.status(200).json(response)
+        res.status(200).json(`denied friend request from ${target}`)
     } catch (error) {
         res.status(403).json({
-            message: error
+            message: `error denying friend request from ${target}: ${error}`
         })
     }
 })
@@ -238,10 +238,10 @@ social.put("/friend/invite", verifyToken, async (req, res) => {
         console.log(`sending friend invite to ${target} from ${userPhone}`)
         const response = await sendFriendRequest(userPhone, target)
 
-        res.status(200).json(response)
+        res.status(200).json(`sent friend request to ${target}`)
     } catch (error) {
         res.status(403).json({
-            message: error
+            message: `error sending friend request to ${target}: ${error}`
         })
     }
 })

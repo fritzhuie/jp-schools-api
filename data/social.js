@@ -4,6 +4,7 @@ const interaction = new mongoose.Schema(
     {
         sender:       { type: String, required: true },
         message:      { type: String, required: true },
+        emoji:        { type: String, required: true },
         viewed:       { type: Boolean, default: false },
     },
     { timestamps: true }
