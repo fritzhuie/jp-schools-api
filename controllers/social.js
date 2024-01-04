@@ -234,12 +234,27 @@ const refreshPolls = async () => {
     }
 }
 
-const inboxFeed = async (userphone) => {
+const inbox = async (userphone) => {
     try {
         const user = await User.findOne({ phone: userphone })
         if (!user) { throw new Error('User not found') }
 
-        return user.inbox
+        let inbox = []
+
+        for(const objectId of user.inbox) {
+            const interaction = await Interaction.findOne({_id: objectId})
+            console.log(interaction)
+            const sender = await User.findOne({phone: interaction.sender })
+            console.log(sender)
+            const update = {
+                sender: sender.phone,
+                message: interaction.message,
+                emoji: interaction.emoji
+            }
+            console.log(update)
+            inbox.push(update)
+        }
+        return inbox
     } catch (e) {
         console.error('Error getting inbox:', e)
         throw e
@@ -258,6 +273,8 @@ const activityFeed = async (userphone) => {
     // sort by created date
     // return array of interactions
 }
+
+// SEEDING **************************************************************************************************
 
 const createCompliment = async (payload) => {
     try {
@@ -278,7 +295,7 @@ export {
     acceptFriendRequest,
     removeFriend,
     getFriendRecommendations,
-    inboxFeed,
+    inbox,
     activityFeed,
     polls,
     refreshPolls,

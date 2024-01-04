@@ -15,7 +15,8 @@ import {
     getFriendRecommendations,
     refreshPolls,
     polls,
-    answerPoll
+    answerPoll,
+    inbox
 } from "../controllers/social.js"
 
 // GET activity feed
@@ -289,6 +290,21 @@ social.post("/polls/answer", verifyToken, async (req, res) => {
     } catch (error) {
         res.status(403).json({
             message: `There was an error: ${error}`,
+        })
+    }
+})
+
+social.get("/inbox", verifyToken, async (req, res) => {
+    try {
+        const userPhone = req.user.phone
+        const response = await inbox(userPhone)
+        console.log(response)
+        res.status(200).json({
+            response
+        })
+    } catch (error) {
+        res.status(403).json({
+            message: `There was an error getting inbox: ${error}`,
         })
     }
 })
