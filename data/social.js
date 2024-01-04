@@ -1,4 +1,4 @@
-import mongoose, { Mongoose, mongo } from 'mongoose';
+import mongoose, { Mongoose, mongo } from 'mongoose'
 
 const interaction = new mongoose.Schema(
     {
@@ -31,15 +31,22 @@ const user = new mongoose.Schema(
         avatar:        { type: String, default: null },
         familyname:    { type: String, default: null },
         givenname:     { type: String, default: null  },
-        friends:      [{ type: String }], //userIDs (friend ids)
-        blocked:      [{ type: String }], //userIDs (blocked users)
-        pending:      [{ type: String }], //userIDs (friend requests)
+        friends:      [{ type: Number }], //userIDs (friend ids)
+        blocked:      [{ type: Number }], //userIDs (blocked users)
+        pending:      [{ type: Number }], //userIDs (friend requests)
         inbox:        [{ type: mongoose.Schema.Types.ObjectId, ref: 'Interaction' }], //your activity
         activity:     [{ type: mongoose.Schema.Types.ObjectId, ref: 'Interaction' }], //friends activity
         queue:        [{ type: mongoose.Schema.Types.ObjectId, ref: 'Compliment'  }]  //queue of daily polls
     },
     { timestamps: true }
 )
+
+user.pre('save', function(next) {
+    this.friends = Array.from(new Set(this.friends))
+    this.blocked = Array.from(new Set(this.blocked))
+    this.pending = Array.from(new Set(this.pending))
+    next()
+})
 
 const User = mongoose.model('User', user)
 

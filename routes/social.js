@@ -3,7 +3,10 @@ import jwt from 'jsonwebtoken'
 const social = express.Router()
 const JWT_SECRET = process.env.JWT_SECRET
 
-import { login, createAccount, readProfile, updateAvatar } from '../controllers/social.js'
+import { 
+    login, createAccount, readProfile, updateAvatar, denyFriendRequest,
+    sendFriendRequest, acceptFriendRequest, removeFriend 
+} from '../controllers/social.js'
 
 // PUT change profile photo
 
@@ -121,6 +124,10 @@ social.put('/avatar', verifyToken, async (req, res) => {
         const response = await updateAvatar(phoneNumber, url)
         if (response) {
             res.status(200).json(response)
+        } else {
+            res.status(403).json({
+                message: "response was null"
+            })
         }
     } catch (error) {
         res.status(403).json({
@@ -129,7 +136,42 @@ social.put('/avatar', verifyToken, async (req, res) => {
     }
 })
 
-// social.post('/request', )
+social.put('/invitation/:action', verifyToken, (req, res) => {
+    try {
+        const action = req.params.action
+        const userPhone = req.user.phone
+        const target = req.body.target
+
+        let response = null
+        if (action === "request") {
+            if (userPhone == target) { throw new Error("cannot add yourself as a friend")}
+            console.log(`sending friend invite to ${target} from ${userPhone}`)
+            response = sendFriendRequest(userPhone, target)
+        } else if (action === "accept") {
+            console.log(`accepting friend request from ${target}`)
+            response = acceptFriendRequest(userPhone, target)
+        } else if (action === "deny") {
+            console.log(`denying friend request from ${target}`)
+            response = denyFriendRequest(userPhone, target)
+        } else if (action === "remove") {
+            console.log(`removing friend ${target} from ${userPhone}`)
+            response = removeFriend(userPhone, target)
+        }
+
+        if (response) {
+            res.status(200).json(response)
+        } else {
+            res.status(403).json({
+                message: "response was null"
+            })
+        }
+
+    } catch (error) {
+        res.status(403).json({
+            message: error,
+        })
+    }
+})
 
 social.get('/verifyToken', verifyToken, (req, res) => {
     try {

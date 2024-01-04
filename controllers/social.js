@@ -6,8 +6,8 @@ const login = async (phoneNumber) => {
     try {
         const user = await User.exists({phone: phoneNumber})
         return user
-    } catch (error) {
-        throw `error thrown for ${phoneNumber}: ${error}`
+    } catch (e) {
+        throw `error thrown for ${phoneNumber}: ${e}`
     }
 }
 
@@ -41,6 +41,72 @@ const readProfile = async (phoneNumber) => {
     if (user) { return user }
     throw 'user not found'
 }
+
+const sendFriendRequest = async (userPhone, friendPhone) => {
+    try {
+        const subject = await User.findOne({ phone: userPhone })
+        if (!subject) throw new Error('User not found')
+
+        if (!subject.friends.includes(friendPhone)) {
+            subject.friends.push(friendPhone)
+            await subject.save()
+        }
+
+        return subject
+    } catch (e) {
+        throw e
+    }
+}
+
+const denyFriendRequest = async (userPhone, friendPhone) => {
+    try {
+        const subject = await User.findOne({ phone: userPhone })
+        if (!subject) throw new Error('User not found')
+
+        // Check if friend's request is pending
+        if (subject.pending.includes(friendPhone)) {
+            subject.pending = subject.pending.filter(phone => phone !== friendPhone)
+            await subject.save()
+        }
+
+        return subject
+    } catch (e) {
+        throw e
+    }
+}
+
+const acceptFriendRequest = async (userPhone, friendPhone) => {
+    try {
+        const subject = await User.findOne({ phone: userPhone })
+        if (!subject) throw new Error('User not found')
+    
+        if (subject.pending.includes(friendPhone)) {
+            subject.friends.push(friendPhone)
+            subject.pending = subject.pending.filter(phone => phone !== friendPhone)
+            await subject.save()
+        } else {
+            throw new Error('friend request not found')
+        }
+    } catch (e) {
+        throw e
+    }
+}
+
+const removeFriend = async (userPhone, friendPhone) => {
+    try {
+        const subject = await User.findOne({ phone: userPhone })
+        if (!subject) throw new Error('User not found')
+
+        subject.friends = subject.friends.filter(phone => phone !== friendPhone)
+        await subject.save()
+
+        return subject
+    } catch (e) {
+        throw e
+    }
+}
+
+
 
 // PUT change profile photo
 const updateAvatar = async (phone, newImageUrl) => {
@@ -83,5 +149,9 @@ export {
     createCompliment,
     createAccount,
     readProfile,
-    updateAvatar
+    updateAvatar,
+    sendFriendRequest,
+    denyFriendRequest,
+    acceptFriendRequest,
+    removeFriend
 }
