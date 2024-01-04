@@ -1,4 +1,4 @@
-import express from "express"
+import express, { response } from "express"
 import jwt from "jsonwebtoken"
 const social = express.Router()
 const JWT_SECRET = process.env.JWT_SECRET
@@ -12,11 +12,9 @@ import {
     sendFriendRequest,
     acceptFriendRequest,
     removeFriend,
+    getFriendRecommendations
 } from "../controllers/social.js"
 
-// PUT change profile photo
-
-// GET friend recommendations
 // GET activity feed
 // GET inbox
 
@@ -142,6 +140,29 @@ social.put("/avatar", verifyToken, async (req, res) => {
     }
 })
 
+// FRIEND RECOMMENDATION ************************************************************************************************************
+
+social.get("/friend/finder", verifyToken, async (req, res) => {
+    try {
+        const userPhone = req.user.phone
+        if (!userPhone) { throw new Error("user not found") }
+
+        console.log(`getting friend recommendations for ${userPhone}`)
+
+        const response = await getFriendRecommendations(userPhone)
+
+        console.log("resonse", response)
+
+        res.status(200).json(response)
+    } catch (error) {
+        console.log(error)
+        res.status(403).json({
+            message: error
+        })
+    }
+})
+
+
 // FRIEND MANAGEMENT *********************************************************************************************************
 
 social.put("/friend/remove", verifyToken, async (req, res) => {
@@ -156,11 +177,7 @@ social.put("/friend/remove", verifyToken, async (req, res) => {
         console.log(`removing friend ${target} from ${userPhone}`)
         response = await removeFriend(userPhone, target)
 
-        if (response) {
-            res.status(200).json(response)
-        }
-
-        res.status(403).json({ message: "response was null" })
+        res.status(200).json(response)
     } catch (error) {
         res.status(403).json({
             message: error
@@ -178,13 +195,8 @@ social.put("/friend/accept", verifyToken, async (req, res) => {
         }
         console.log(`accepting friend request from ${target}`)
         response = await acceptFriendRequest(userPhone, target)
-        .then(response => {
-            if (response) {
-                res.status(200).json(response)
-            } else {
-                res.status(403).json({ message: "response was null" })
-            }
-        })
+
+        res.status(200).json(response)
     } catch (error) {
         res.status(403).json({
             message: error
@@ -203,11 +215,7 @@ social.put("/friend/deny", verifyToken, async (req, res) => {
         console.log(`denying friend request from ${target}`)
         response = await denyFriendRequest(userPhone, target)
 
-        if (response) {
-            res.status(200).json(response)
-        }
-
-        res.status(403).json({ message: "response was null" })
+        res.status(200).json(response)
     } catch (error) {
         res.status(403).json({
             message: error
@@ -226,17 +234,15 @@ social.put("/friend/invite", verifyToken, (req, res) => {
         console.log(`sending friend invite to ${target} from ${userPhone}`)
         const response = sendFriendRequest(userPhone, target)
 
-        if (response) {
-            res.status(200).json(response)
-        }
-
-        res.status(403).json({ message: "response was null" })
+        res.status(200).json(response)
     } catch (error) {
         res.status(403).json({
             message: error
         })
     }
 })
+
+// AUTH **********************************************************************************************************
 
 social.get("/verifyToken", verifyToken, (req, res) => {
     try {

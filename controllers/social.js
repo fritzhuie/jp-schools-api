@@ -48,6 +48,32 @@ const readProfile = async (phoneNumber) => {
 
 // FRIEND MANAGEMENT *********************************************************************************************
 
+const getFriendRecommendations = async (userPhone) => {
+    try {
+        const user = await User.findOne({ phone: userPhone })
+        if (!user) throw new Error('User not found')
+
+        const allUsers = await User.find({ phone: { $ne: userPhone } }, 'phone -_id')
+        const allPhoneNumbers = allUsers.map(user => user.phone)
+
+        const recommendations = allPhoneNumbers.filter(phoneNumber => 
+            !user.friends.includes(phoneNumber)
+        )
+
+        const profiles = await Promise.all(
+            recommendations.map(phone => User.findOne({ phone }, 'username givenname familyname avatar -_id'))
+        )
+
+        console.log("profiles", profiles)
+
+        return profiles
+    } catch (e) {
+        console.log(`something went wrong: ${e}`)
+        throw `something went wrong: ${e}`
+    }
+}
+
+
 const sendFriendRequest = async (userPhone, friendPhone) => {
     try {
         const subject = await User.findOne({ phone: friendPhone })
@@ -82,12 +108,15 @@ const acceptFriendRequest = async (userPhone, friendPhone) => {
     try {
         const subject = await User.findOne({ phone: userPhone })
         const friend = await User.findOne({ phone: friendPhone })
+
         if (!subject || !friend) throw new Error('User not found')
     
         const friendRequestIndex = subject.pending.indexOf(friendPhone)
         if (friendRequestIndex !== -1) {
+
             subject.friends.push(friendPhone)
             friend.friends.push(userPhone)
+
             subject.pending = subject.pending.filter(phone => phone !== Number(friendPhone))
             friend.pending = friend.pending.filter(phone => phone !== Number(userPhone))
             await subject.save()
@@ -161,5 +190,6 @@ export {
     sendFriendRequest,
     denyFriendRequest,
     acceptFriendRequest,
-    removeFriend
+    removeFriend,
+    getFriendRecommendations
 }
