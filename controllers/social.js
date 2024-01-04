@@ -32,6 +32,7 @@ const createAccount = async (payload) => {
                 givenname: payload.givenname
             }
         )
+
         await newUser.save()
         return `account created for phone number: ${payload.phone}`
     } catch (e) {
@@ -152,9 +153,9 @@ const removeFriend = async (userPhone, friendPhone) => {
 const updateAvatar = async (phone, newImageUrl) => {
     try {
         const result = await User.findOneAndUpdate(
-            { phone: phone },     // find the user by phone number
-            { avatar: newImageUrl },    // update the profileImg field
-            { new: true }               // return the updated document
+            { phone: phone }, //find this
+            { avatar: newImageUrl }, // update this
+            { new: true } // return the updated document
         )
         return result
     } catch (e) {
@@ -263,6 +264,7 @@ const inbox = async (userphone) => {
 }
 
 const activityFeed = async (userphone) => {
+    // STRETCH GOAL
     // pull friends list from user
     const user = await User.findOne({phone: userphone})
     const updates = await Promise.all(
@@ -302,6 +304,3 @@ export {
     refreshPolls,
     answerPoll
 }
-
-// GET activity feed
-// GET inbox
