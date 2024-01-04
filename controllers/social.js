@@ -1,6 +1,8 @@
 
 import { Compliment, Interaction, User } from '../data/social.js'
 
+// AUTH  ******************************************************************************************************
+
 // POST phone number login
 const login = async (phoneNumber) => {
     try {
@@ -10,6 +12,8 @@ const login = async (phoneNumber) => {
         throw `error thrown for ${phoneNumber}: ${e}`
     }
 }
+
+// PROFILE ******************************************************************************************************
 
 // POST create account
 const createAccount = async (payload) => {
@@ -35,20 +39,22 @@ const createAccount = async (payload) => {
     }
 }
 
-// view self profile
 const readProfile = async (phoneNumber) => {
     const user = await User.findOne({ phone: phoneNumber })
     if (user) { return user }
     throw 'user not found'
 }
 
+
+// FRIEND MANAGEMENT *********************************************************************************************
+
 const sendFriendRequest = async (userPhone, friendPhone) => {
     try {
-        const subject = await User.findOne({ phone: userPhone })
+        const subject = await User.findOne({ phone: friendPhone })
         if (!subject) throw new Error('User not found')
 
-        if (!subject.friends.includes(friendPhone)) {
-            subject.friends.push(friendPhone)
+        if (!subject.pending.includes(userPhone)) {
+            subject.pending.push(userPhone)
             await subject.save()
         }
 
@@ -63,11 +69,8 @@ const denyFriendRequest = async (userPhone, friendPhone) => {
         const subject = await User.findOne({ phone: userPhone })
         if (!subject) throw new Error('User not found')
 
-        // Check if friend's request is pending
-        if (subject.pending.includes(friendPhone)) {
-            subject.pending = subject.pending.filter(phone => phone !== friendPhone)
-            await subject.save()
-        }
+        subject.pending = subject.pending.filter(phone => phone !== Number(friendPhone))
+        await subject.save()
 
         return subject
     } catch (e) {
@@ -78,12 +81,18 @@ const denyFriendRequest = async (userPhone, friendPhone) => {
 const acceptFriendRequest = async (userPhone, friendPhone) => {
     try {
         const subject = await User.findOne({ phone: userPhone })
-        if (!subject) throw new Error('User not found')
+        const friend = await User.findOne({ phone: friendPhone })
+        if (!subject || !friend) throw new Error('User not found')
     
-        if (subject.pending.includes(friendPhone)) {
+        const friendRequestIndex = subject.pending.indexOf(friendPhone)
+        if (friendRequestIndex !== -1) {
             subject.friends.push(friendPhone)
-            subject.pending = subject.pending.filter(phone => phone !== friendPhone)
+            friend.friends.push(userPhone)
+            subject.pending = subject.pending.filter(phone => phone !== Number(friendPhone))
+            friend.pending = friend.pending.filter(phone => phone !== Number(userPhone))
             await subject.save()
+            await friend.save()
+            return "successfully added friend"
         } else {
             throw new Error('friend request not found')
         }
@@ -95,10 +104,13 @@ const acceptFriendRequest = async (userPhone, friendPhone) => {
 const removeFriend = async (userPhone, friendPhone) => {
     try {
         const subject = await User.findOne({ phone: userPhone })
-        if (!subject) throw new Error('User not found')
+        const friend = await User.findOne({ phone: friendPhone })
+        if (!subject || !friend) throw new Error('User not found')
 
-        subject.friends = subject.friends.filter(phone => phone !== friendPhone)
+        subject.friends = subject.friends.filter(phone => phone !== Number(friendPhone))
+        friend.friends = friend.friends.filter(phone => phone !== Number(userPhone))
         await subject.save()
+        await friend.save()
 
         return subject
     } catch (e) {
@@ -106,7 +118,7 @@ const removeFriend = async (userPhone, friendPhone) => {
     }
 }
 
-
+// AVATAR ***************************************************************************************************
 
 // PUT change profile photo
 const updateAvatar = async (phone, newImageUrl) => {
@@ -125,10 +137,6 @@ const updateAvatar = async (phone, newImageUrl) => {
 // GET friend recommendations
 // GET activity feed
 // GET inbox
-
-// POST send friend request
-// POST accept friend request
-// POST reject friend request
 
 // POST block user
 // DELETE unblock all users
