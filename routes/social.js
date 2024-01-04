@@ -13,7 +13,9 @@ import {
     acceptFriendRequest,
     removeFriend,
     getFriendRecommendations,
-    refreshPolls
+    refreshPolls,
+    polls,
+    answerPoll
 } from "../controllers/social.js"
 
 // GET activity feed
@@ -252,13 +254,44 @@ social.get("/polls/refresh", async (req, res) => {
             message: `done seeded polls`,
         })
     } catch (error) {
-        res.status(500).json({
+        res.status(403).json({
             message: `There was an error: ${error}`,
         })
     }
 })
 
-//refreshPolls
+social.get("/polls", verifyToken, async (req, res) => {
+    try {
+        const userPhone = req.user.phone
+        const response = await polls(userPhone)
+        console.log(response)
+        res.status(200).json({
+            response
+        })
+    } catch (error) {
+        res.status(403).json({
+            message: `There was an error: ${error}`,
+        })
+    }
+})
+
+social.post("/polls/answer", verifyToken, async (req, res) => {
+    try {
+        const userPhone = req.user.phone
+        const poll = req.body.poll
+        const chosen = req.body.chosen
+
+        const response = await answerPoll(userPhone, poll, chosen)
+
+        res.status(200).json({
+            message: `answered poll successfully`,
+        })
+    } catch (error) {
+        res.status(403).json({
+            message: `There was an error: ${error}`,
+        })
+    }
+})
 
 
 // AUTH **********************************************************************************************************

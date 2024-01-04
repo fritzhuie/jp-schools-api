@@ -2,12 +2,9 @@ import mongoose, { Mongoose, mongo } from 'mongoose'
 
 const interaction = new mongoose.Schema(
     {
-        uid:          { type: String, required: true },
         sender:       { type: String, required: true },
-        reciever:     { type: String, required: true },
         message:      { type: String, required: true },
         viewed:       { type: Boolean, default: false },
-        reveal:       { type: Boolean, default: false } //won't use, ice box
     },
     { timestamps: true }
 )

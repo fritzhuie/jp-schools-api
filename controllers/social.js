@@ -1,6 +1,7 @@
 
 import { Compliment, Interaction, User } from '../data/social.js'
 import _ from 'lodash'
+import mongoose from 'mongoose'
 
 // AUTH  ******************************************************************************************************
 
@@ -163,12 +164,50 @@ const updateAvatar = async (phone, newImageUrl) => {
 
 // INTERACTIONS *************************************************************************************************
 
-const handlePollInteraction = async (userphone, poll, chosen) => {
+const polls = async (userPhone) => {
+    try {
+        const user = await User.findOne({ phone: userPhone })
+        return user.queue
+    } catch (e) {
+        throw e
+    }
+}
 
-    // check if poll exists in current User profile
-    // remove poll from current user's User.queue
-    // send interaction to chosen user
-    // return 200
+const answerPoll = async (userPhone, poll, chosen) => {
+
+    try {
+        const user = await User.findOne({ phone: userPhone })
+        const target = await User.findOne({ phone: chosen })
+
+        const pollObjectId = new mongoose.Types.ObjectId(poll)
+        console.log( pollObjectId )
+        console.log( user.queue)
+
+        const pollIndex = user.queue.indexOf(pollObjectId)
+        if (pollIndex === -1) {
+            throw new Error(`Poll not found in user's queue`)
+        }
+
+        const compliment = await Compliment.findOne({ _id: poll})
+
+        //remove poll from queue
+        await User.updateOne({ _id: user._id }, { $pull: { queue: poll } })
+
+        const interaction = new Interaction({
+            sender: userPhone,
+            message: compliment.message,
+            viewed: false
+        })
+        await interaction.save()
+        
+        await User.updateOne({ _id: target._id }, { $push: { inbox: interaction._id } })
+
+        return 200
+
+    } catch (e) {
+        console.error('Error answering poll:', e)
+        throw e
+    }
 }
 
 const refreshPolls = async () => {
@@ -195,7 +234,7 @@ const refreshPolls = async () => {
     }
 }
 
-const getInbox = async (userphone) => {
+const inboxFeed = async (userphone) => {
     try {
         const user = await User.findOne({ phone: userphone })
         if (!user) { throw new Error('User not found') }
@@ -207,7 +246,7 @@ const getInbox = async (userphone) => {
     }
 }
 
-const activity = async (userphone) => {
+const activityFeed = async (userphone) => {
     // pull friends list from user
     const user = await User.findOne({phone: userphone})
     const updates = await Promise.all(
@@ -239,11 +278,12 @@ export {
     acceptFriendRequest,
     removeFriend,
     getFriendRecommendations,
-    refreshPolls
+    inboxFeed,
+    activityFeed,
+    polls,
+    refreshPolls,
+    answerPoll
 }
 
 // GET activity feed
 // GET inbox
-
-// POST block user
-// DELETE unblock all users
