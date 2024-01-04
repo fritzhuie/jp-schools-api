@@ -196,6 +196,7 @@ const answerPoll = async (userPhone, poll, chosen) => {
         const interaction = new Interaction({
             sender: userPhone,
             message: compliment.message,
+            emoji: compliment.emoji,
             viewed: false
         })
         await interaction.save()
