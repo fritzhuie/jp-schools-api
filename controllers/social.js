@@ -3,7 +3,6 @@ import { Compliment, Interaction, User } from '../data/social.js'
 
 // AUTH  ******************************************************************************************************
 
-// POST phone number login
 const login = async (phoneNumber) => {
     try {
         const user = await User.exists({phone: phoneNumber})
@@ -15,7 +14,6 @@ const login = async (phoneNumber) => {
 
 // PROFILE ******************************************************************************************************
 
-// POST create account
 const createAccount = async (payload) => {
     try {
         const userExists = await User.exists({ phone: payload.phone })
@@ -149,7 +147,6 @@ const removeFriend = async (userPhone, friendPhone) => {
 
 // AVATAR ***************************************************************************************************
 
-// PUT change profile photo
 const updateAvatar = async (phone, newImageUrl) => {
     try {
         const result = await User.findOneAndUpdate(
@@ -163,12 +160,29 @@ const updateAvatar = async (phone, newImageUrl) => {
     }
 }
 
-const answerPoll = async (user, payload) => {
+// INTERACTIONS *************************************************************************************************
 
+const handlePollInteraction = async (user, payload) => {
+    // remove poll from current user
+    // send interaction to chosen user
+    //return 200
 }
 
-const processInteraction = async () => {
-    // add interaction object to target
+const refreshPolls = async () => {
+    // add 10 random polls to user
+    //return 200
+}
+
+const getInbox = async (user) => {
+    // return User.inbox
+    //return 200
+}
+
+const activity = async (user) => {
+    // pull friends list from user
+    // for each friend, pull inbox, flat()
+    // sort by created date
+    // return array of interactions
 }
 
 const createCompliment = async (payload) => {
@@ -197,6 +211,3 @@ export {
 
 // POST block user
 // DELETE unblock all users
-
-// POST answer poll
-// POST skip poll
