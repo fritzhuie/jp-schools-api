@@ -163,15 +163,13 @@ const updateAvatar = async (phone, newImageUrl) => {
     }
 }
 
-// GET friend recommendations
-// GET activity feed
-// GET inbox
+const answerPoll = async (user, payload) => {
 
-// POST block user
-// DELETE unblock all users
+}
 
-// POST answer poll
-// POST skip poll
+const processInteraction = async () => {
+    // add interaction object to target
+}
 
 const createCompliment = async (payload) => {
     try {
@@ -193,3 +191,12 @@ export {
     removeFriend,
     getFriendRecommendations
 }
+
+// GET activity feed
+// GET inbox
+
+// POST block user
+// DELETE unblock all users
+
+// POST answer poll
+// POST skip poll

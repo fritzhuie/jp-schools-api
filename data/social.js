@@ -35,7 +35,6 @@ const user = new mongoose.Schema(
         blocked:      [{ type: Number }], //userIDs (blocked users)
         pending:      [{ type: Number }], //userIDs (friend requests)
         inbox:        [{ type: mongoose.Schema.Types.ObjectId, ref: 'Interaction' }], //your activity
-        activity:     [{ type: mongoose.Schema.Types.ObjectId, ref: 'Interaction' }], //friends activity
         queue:        [{ type: mongoose.Schema.Types.ObjectId, ref: 'Compliment'  }]  //queue of daily polls
     },
     { timestamps: true }
