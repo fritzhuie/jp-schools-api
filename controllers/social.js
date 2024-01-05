@@ -230,7 +230,7 @@ const refreshPolls = async () => {
 
         for(let compliment of randomCompliments) {
             const randomUsers = _.sampleSize(users, 4)
-            const choices = randomUsers.map(user => user.phone)
+            const choices = randomUsers.map(user => user.phone) 
 
             const newPoll = new Poll(
                 {

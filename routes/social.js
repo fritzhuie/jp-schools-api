@@ -106,8 +106,9 @@ social.get("/profile", verifyToken, async (req, res) => {
 social.get("/profile/:phone", verifyToken, async (req, res) => {
     try {
         const phoneNumber = req.params.phone
-        console.log("pulling other account for: ", phoneNumber)
+        console.log("pulling account for: ", phoneNumber)
         const response = await readProfile(phoneNumber)
+        console.log("returning: ", response)
         if (response) {
             res.status(200).json(response)
         }
