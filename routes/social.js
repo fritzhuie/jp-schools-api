@@ -234,12 +234,13 @@ social.put("/friend/invite", verifyToken, async (req, res) => {
             throw new Error("cannot add yourself as a friend")
         }
         console.log(`sending friend invite to ${target} from ${userPhone}`)
+
         const response = await sendFriendRequest(userPhone, target)
 
         res.status(200).json(`sent friend request to ${target}`)
     } catch (error) {
         res.status(403).json({
-            message: `error sending friend request to ${target}: ${error}`
+            message: `error sending friend request: ${error}`
         })
     }
 })

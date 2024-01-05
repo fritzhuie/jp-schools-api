@@ -62,7 +62,7 @@ const getFriendRecommendations = async (userPhone) => {
         )
 
         const profiles = await Promise.all(
-            recommendations.map(phone => User.findOne({ phone }, 'username givenname familyname avatar -_id'))
+            recommendations.map(phone => User.findOne({ phone }, 'username givenname familyname avatar phone -_id'))
         )
 
         console.log("profiles", profiles)
