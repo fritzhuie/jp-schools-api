@@ -184,11 +184,14 @@ const polls = async (userPhone) => {
 
 const answerPoll = async (userPhone, poll, chosen) => {
 
+    console.log(`User ${userPhone} answered ${poll} with choice: ${chosen}`)
+
     try {
         const user = await User.findOne({ phone: userPhone })
         const target = await User.findOne({ phone: chosen })
 
         const pollObjectId = new mongoose.Types.ObjectId(poll)
+        
         console.log( pollObjectId )
         console.log( user.queue)
 

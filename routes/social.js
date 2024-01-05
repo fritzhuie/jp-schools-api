@@ -52,7 +52,8 @@ social.post("/login", async (req, res) => {
                 expiresIn: "24h",
             })
             res.status(200).json({
-                token: token,
+                token: token
+                // make it cookie somehow?
             })
         } else {
             res.status(403).json({
