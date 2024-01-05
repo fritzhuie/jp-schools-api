@@ -168,7 +168,15 @@ const updateAvatar = async (phone, newImageUrl) => {
 const polls = async (userPhone) => {
     try {
         const user = await User.findOne({ phone: userPhone })
-        return user.queue
+        let polls = []
+        for(const  pollId of user.queue) {
+            const p = await Poll.findOne({ _id: pollId })
+            if(p) {
+                polls.push(p)
+            }
+        }
+        console.log("returning: ", polls)
+        return polls
     } catch (e) {
         throw e
     }
