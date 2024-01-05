@@ -1,5 +1,5 @@
 
-import { Compliment, Interaction, User } from '../data/social.js'
+import { Compliment, Interaction, User, Poll } from '../data/social.js'
 import _ from 'lodash'
 import mongoose from 'mongoose'
 
@@ -189,23 +189,21 @@ const answerPoll = async (userPhone, poll, chosen) => {
             throw new Error(`Poll not found in user's queue`)
         }
 
-        const compliment = await Compliment.findOne({ _id: poll})
-
-        //remove poll from queue
-        await User.updateOne({ _id: user._id }, { $pull: { queue: poll } })
+        const pollData = await Poll.findOne({ _id: poll})
 
         const interaction = new Interaction({
             sender: userPhone,
-            message: compliment.message,
-            emoji: compliment.emoji,
+            message: pollData.message,
+            emoji: pollData.emoji,
+            color: pollData.color,
             viewed: false
         })
         await interaction.save()
         
+        await User.updateOne({ _id: user._id }, { $pull: { queue: poll } })
         await User.updateOne({ _id: target._id }, { $push: { inbox: interaction._id } })
 
         return 200
-
     } catch (e) {
         console.error('Error answering poll:', e)
         throw e
@@ -220,12 +218,30 @@ const refreshPolls = async () => {
   
       for (const user of users) {
         const randomCompliments = _.sampleSize(compliments, 3)
+        const polls = []
+
+        for(let compliment of randomCompliments) {
+            const randomUsers = _.sampleSize(users, 4)
+            const choices = randomUsers.map(user => user.phone)
+
+            const newPoll = new Poll(
+                {
+                    emoji: compliment.emoji,
+                    message: compliment.message,
+                    color: compliment.color,
+                    choices: choices
+                }
+            )
+            console.log(newPoll)
+            await newPoll.save()
+            polls.push(newPoll)
+        }
   
         await User.updateOne({ _id: user._id }, { $set: { queue: [] } })
-        
+
         await User.updateOne(
           { _id: user._id },
-          { $push: { queue: { $each: randomCompliments.map(c => c._id) } } }
+          { $push: { queue: { $each: polls.map(c => c._id) } } }
         )
       }
   
