@@ -19,13 +19,10 @@ import {
     inbox
 } from "../controllers/social.js"
 
+// ICEBOX:
 // GET activity feed
-// GET inbox
-
 // POST block user
 // DELETE unblock all users
-
-// POST answer poll
 // POST skip poll
 
 social.get("/", (req, res) => {
@@ -70,6 +67,7 @@ social.post("/login", async (req, res) => {
 })
 
 social.post("/signup", async (req, res) => {
+    console.log("signup ping:", req.body)
     try {
         const response = await createAccount(req.body)
         if (response) {

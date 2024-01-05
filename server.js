@@ -21,8 +21,8 @@ app.use(express.json())
 app.use(methodOverride('_method'))
 app.use(express.urlencoded({extended: true}))
 
-app.use('/schools', schools)
 app.use('/social', social)
+app.use('/schools', schools)
 app.use('/seed', seed)
 
 const {PORT = 2000} = process.env
