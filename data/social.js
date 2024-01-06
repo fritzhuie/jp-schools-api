@@ -39,7 +39,7 @@ const user = new mongoose.Schema(
     {
         phone:         { type: Number, required: true, unique: true },
         username:      { type: String, required: true, unique: true },
-        avatar:        { type: String, default: "portrait-0.png" },
+        avatar:        { type: String, default: "img/portrait-0.png" },
         familyname:    { type: String, default: null },
         givenname:     { type: String, default: null },
         friends:      [{ type: Number }], //userIDs (friend ids)

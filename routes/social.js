@@ -203,7 +203,7 @@ social.put("/friend/accept", verifyToken, async (req, res) => {
         res.status(200).json(`accepted friend request from ${target}`)
     } catch (error) {
         res.status(403).json({
-            message: `error accepting friend request from ${target}: ${error}`
+            message: `error accepting friend request: ${error}`
         })
     }
 })

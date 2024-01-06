@@ -107,8 +107,8 @@ const denyFriendRequest = async (userPhone, friendPhone) => {
 
 const acceptFriendRequest = async (userPhone, friendPhone) => {
     try {
-        const subject = await User.findOne({ phone: userPhone })
-        const friend = await User.findOne({ phone: friendPhone })
+        let subject = await User.findOne({ phone: userPhone })
+        let friend = await User.findOne({ phone: friendPhone })
 
         if (!subject || !friend) throw new Error('User not found')
     
@@ -228,7 +228,7 @@ const refreshPolls = async () => {
       const users = await User.find()
   
       for (const user of users) {
-        const randomCompliments = _.sampleSize(compliments, 3)
+        const randomCompliments = _.sampleSize(compliments, 6)
         const polls = []
 
         for(let compliment of randomCompliments) {
