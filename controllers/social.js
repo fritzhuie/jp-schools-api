@@ -272,9 +272,13 @@ const inbox = async (userphone) => {
 
         for(const objectId of user.inbox) {
             const interaction = await Interaction.findOne({_id: objectId})
+            if (!interaction) { throw new Error("Missing sender") }
             console.log(interaction)
+
             const sender = await User.findOne({phone: interaction.sender })
+            if (!sender) { throw new Error("Missing sender") }
             console.log(sender)
+
             const update = {
                 sender: sender.phone,
                 message: interaction.message,
