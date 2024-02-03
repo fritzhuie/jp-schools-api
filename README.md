@@ -7,7 +7,6 @@
 4. [ERD (Entity Relationship Diagram)](#erd)
 5. [Location API User Stories (MVP)](#location-api-user-stories-mvp)
 6. [Admin Panel API User Stories](#admin-panel-api-user-stories)
-7. [Timeline](#timeline)
 
 ### [Trello](https://trello.com/b/mM90QUXy/school-location-endpoint-service)
 
@@ -126,17 +125,3 @@ The Admin panel uses `Event`, `User`,
 | :------ | :-----------:     | :---------: | :---------: |
 | `POST`    | `/admin/school`     | JSON   | Create a new `school_information` object, returns the new object
 | `POST`    | `/admin/location`   | JSON   | Create a new `geolocation` object, returns the new object
-
-
-## Timeline
-
-| Day       | Prio | Task                                            |
-| :-------- | :--: | :---------------------------------------------- |
-| Tuesday   | MVP  | Set up project structure and basic configurations (Node.js, Express) |
-| Wednesday | MVP  | Design and implement the data model for MongoDB. |
-| Thursday  | MVP  | Develop the API endpoints for `/api/schools`.    |
-| Friday    | MVP  | Implement the Admin panel basic functionalities (CRUD operations for `school_information` and `geolocation`). |
-| Saturday  | MVP  | Build the basic front-end interface with HTML, CSS (including Wireframes implementation). |
-| Sunday    | Stretch | Integrate the Google Maps API and test location-based functionality. |
-
-
