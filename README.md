@@ -1,13 +1,5 @@
 # Find My School API
 
-## Table of Contents
-1. [Find My School API](#find-my-school-api)
-2. [Technologies Used](#technologies-used)
-3. [Wireframe](#wireframe)
-4. [ERD (Entity Relationship Diagram)](#erd)
-5. [Location API User Stories (MVP)](#location-api-user-stories-mvp)
-6. [Admin Panel API User Stories](#admin-panel-api-user-stories)
-
 ### [Trello](https://trello.com/b/mM90QUXy/school-location-endpoint-service)
 
 A common query type for location-based services, is finding things that are nearby your physical location. This API can be used as a general purpose API for returning the nearest data entries that represent real work locations.
